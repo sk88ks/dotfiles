@@ -1,0 +1,301 @@
+#
+# Executes commands at the start of an interactive session.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
+
+# Customize to your needs...
+
+# TERRAFORM
+#export TERRAFORM_PATH=/usr/local/terraform
+
+# PACKER
+#export PACKER_PATH=/usr/local/packer
+#
+# JAVA
+export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
+
+# Scala
+#export SCALA_PATH=/usr/local/src/scala/bin
+export SCALA_HOME=/usr/local/Cellar/scala/2.11.8
+
+# Spark
+#export SPARK_PATH=/usr/local/src/Spark/bin
+#export SPARK_HOME=/usr/local/Cellar/apache-spark/1.6.1
+
+# NGROK
+export NGROK_PATH=/usr/local/ngrok
+
+# gitql
+export DYLD_LIBRARY_PATH=~/go/src/github.com/cloudson/gitql/libgit2/install/lib
+
+# 環境変数
+export LANG=ja_JP.UTF-8
+export CATALINA_HOME='/usr/local/Cellar/tomcat/7.0.42/libexec'
+# Golang
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+
+# Rust 
+## Cargo
+source ~/.cargo/env
+
+# Nimrod
+export NIMROOT=/usr/local/Nim
+
+# Gradle
+GRADLE_PATH=/usr/local/gradle/gradle-2.14.1
+
+export FBSPATH='/usr/local/flatbuffers/Debug'
+export LANG=ja_JP.UTF-8
+export EDITOR='nvim'
+export SHELL='zsh'
+
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_CACHE_HOME=$HOME/.cache
+
+#AWS CLI
+#export AWS_ACCESS_KEY_ID=myproject
+#export AWS_SECRET_ACCESS_KEY=myproject
+#export AWS_DEFAULT_REGION='us-east-1'
+ 
+#iterm
+#color setting
+
+#export CLICOLOR=1
+#export LSCOLORS=DxGxcxdxCxcgcdabagacad
+#
+#export LESSHISTFILE="-"
+#unset HISTFILE
+
+# Color
+#export LS_COLORS=gxfxcxdxbxegedabagacad
+#
+#if [ -f ~/.dircolors ]; then
+#    if type dircolors > /dev/null 2>&1; then
+#        eval $(dircolors ~/.dircolors)
+#    elif type gdircolors > /dev/null 2>&1; then
+#        eval $(gdircolors ~/.dircolors)
+#    fi
+#fi
+#zstyle ':completion:*' file-colors list-colors ${LSCOLORS}
+ 
+#complete -C aws_completer aws
+
+#EB CLI
+export EBCLIPATH='~/src/AWS-ElasticBeanstalk-CLI-2.6.3/eb/macosx/python2.7/'
+
+# Android NDK
+export NDK_ROOT=~/android-ndks/android-ndk-r10e
+export ANDROID_STANDALONE_TOOLCHAIN=~/toolchain
+
+# Bento4 SDK
+export BENTOPATH='/usr/local/Bento4-SDK'
+
+#Boot2docker
+#export DOCKER_TLS_VERIFY="1"
+#export DOCKER_HOST="tcp://192.168.99.100:2376"
+#export DOCKER_CERT_PATH="/Users/a12658/.docker/machine/machines/default"
+#export DOCKER_MACHINE_NAME="default"
+
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$FBSPATH:$EBCLIPATH:$NGROK_PATH:$NIMROOT/bin:$BENTOPATH/bin:$SCALA_HOME/bin#:$GRADLE_PATH/bin
+
+##alias
+alias redis=redis_init_script
+alias nave="/Users/A12658/nave/nave.sh "
+alias ll="ls -Gal"
+alias npmlocalinstall="npm --registry http://npm.repo.a4c.jp/registry/ install"
+alias gvpin="source gvp in"
+alias gvpout="source gvp out"
+alias fluent-tail="/opt/td-agent/embedded/bin/fluent-tail"
+alias gb=$GOPATH/bin/gb
+alias ctags="`brew --prefix`/bin/ctags"
+
+#nvm
+#. ~/.nvm/nvm.sh
+#nvm use v4.2.1
+
+# n
+n 4.2.2
+
+#for zsh-completions
+fpath=(/usr/local/share/zsh-completions $fpath)
+fpath+=~/.zfunc
+
+# 色を使用出来るようにする
+autoload -Uz colors
+colors
+
+# vim 風キーバインドにする
+bindkey -v
+
+# ヒストリの設定
+HISTFILE=~/.zsh_history
+HISTSIZE=1000000
+SAVEHIST=1000000
+
+# 文字コード
+export LANG=ja_JP.UTF-8
+
+# 単語の区切り文字を指定する
+autoload -Uz select-word-style
+select-word-style default
+# ここで指定した文字は単語区切りとみなされる
+# / も区切りと扱うので、^W でディレクトリ１つ分を削除できる
+zstyle ':zle:*' word-chars " /=;@:{},|"
+zstyle ':zle:*' word-style unspecified
+
+########################################
+# 補完
+# 補完機能を有効にする
+autoload -Uz compinit
+compinit -u
+
+# 補完で小文字でも大文字にマッチさせる
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# ../ の後は今いるディレクトリを補完しない
+zstyle ':completion:*' ignore-parents parent pwd ..
+
+# sudo の後ろでコマンド名を補完する
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
+                   /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
+
+## pyenv
+if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+
+## pyenv-virtualenv
+#if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+
+## virtualenv, virtualenvwrapper
+which virtualenvwrapper.sh > /dev/null
+if [ $? -eq 0 ]; then
+    source `which virtualenvwrapper.sh`
+    mkdir -p ~/.virtualenvs
+    export WORKON_HOME=~/.virtualenvs
+    export PIP_RESPECT_VIRTUALENV=true
+fi
+
+# Pythonz
+if [ -s $HOME/.pythonz/etc/bashrc ]; then
+    source $HOME/.pythonz/etc/bashrc
+fi
+
+# for Golang
+if [ -f /usr/local/go/misc/zsh/go ]; then
+    source /usr/local/go/misc/zsh/go
+fi
+
+# macvim
+if [ -f /Applications/MacVim.app/Contents/MacOS/Vim ]; then
+    alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+    alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+    #alias vigoop='env LANG=ja_JP.UTF-8 goop exec /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+fi
+
+if [ -f /usr/local/bin/nvim ]; then
+    alias nv='/usr/local/bin/nvim'
+fi
+
+# added by travis gem
+[ -f /Users/A12658/.travis/travis.sh ] && source /Users/A12658/.travis/travis.sh
+
+# hub
+#eval "$(hub alias -s)"
+
+# ghq peco
+function peco-src () {
+  local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
+  if [ -n "$selected_dir" ]; then
+    BUFFER="cd ${selected_dir}"
+    zle accept-line
+  fi
+  zle clear-screen
+}
+zle -N peco-src
+bindkey '^]' peco-src
+
+
+#peco
+setopt hist_ignore_all_dups
+
+function peco_select_history() {
+  local tac
+  if which tac > /dev/null; then
+    tac="tac"
+  else
+    tac="tail -r"
+  fi
+  BUFFER=$(fc -l -n 1 | eval $tac | peco --query "$LBUFFER")
+  CURSOR=$#BUFFER
+  zle clear-screen
+}
+zle -N peco_select_history
+bindkey '^r' peco_select_history
+ 
+#function peco-src () {
+#  local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
+#  if [ -n "$selected_dir" ]; then
+#    BUFFER="cd ${selected_dir}"
+#    zle accept-line
+#  fi
+#  zle clear-screen
+#}
+#zle -N peco-src
+#bindkey '^]' peco-src
+
+##git prompt
+## vcs_infoロード    
+#autoload -Uz vcs_info    
+## PROMPT変数内で変数参照する    
+#setopt prompt_subst    
+#
+## vcsの表示    
+## %s version management system name
+## %b branch name
+#zstyle ':vcs_info:git:*' check-for-changes true
+#zstyle ':vcs_info:git:*' stagedstr "%F{yellow}!"
+#zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
+#zstyle ':vcs_info:*' formats "%F{green}%c%u%b%f"
+#zstyle ':vcs_info:*' actionformats '[%b|%a]'
+## プロンプト表示直前にvcs_info呼び出し    
+#precmd() { vcs_info }    
+## プロンプト表示    
+#PROMPT='%{${fg[cyan]}%}[%n@%m]%{${reset_color}%}%~ <${vcs_info_msg_0_}> 
+#%# '
+
+# tag
+export TAG_CMD_FMT_STRING="nv {{.Filename}} +{{.LineNumber}}"
+if (( $+commands[tag] )); then
+  tag() { command tag "$@"; source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null }
+  alias ag=tag
+fi
+
+# Boot2docker nsenter
+docker-enter() {
+  boot2docker ssh '[ -f /var/lib/boot2docker/nsenter ] || docker run --rm -v /var/lib/boot2docker/:/target jpetazzo/nsenter'
+  boot2docker ssh -t sudo /var/lib/boot2docker/docker-enter "$@"
+} 
+
+# added by travis gem
+[ -f /Users/a12658/.travis/travis.sh ] && source /Users/a12658/.travis/travis.sh
+
+# ulimit
+#echo kern.maxfiles=65536 | sudo tee -a /etc/sysctl.conf
+#echo kern.maxfilesperproc=65536 | sudo tee -a /etc/sysctl.conf
+#sudo sysctl -w kern.maxfiles=65536
+#sudo sysctl -w kern.maxfilesperproc=65536
+#ulimit -n 65536 65536
+source ~/.tmuxinator/tmuxinator.zsh
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/a12658/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/a12658/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/a12658/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/a12658/google-cloud-sdk/completion.zsh.inc'; fi

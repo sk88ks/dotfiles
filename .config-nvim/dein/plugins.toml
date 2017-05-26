@@ -1,0 +1,124 @@
+[[plugins]]
+repo = 'Shougo/dein.vim'
+ 
+ [[plugins]]
+repo = 'neomake/neomake'
+hook_add = '''
+    autocmd! BufWritePost * Neomake
+    let g:neomake_verbose = 2
+    let g:neomake_open_list = 2
+    let g:neomake_place_signs = 0
+    let g:neomake_go_enabled_makers = ['goimports', 'gometalinter']
+    let g:neomake_go_gometalinter_args = ['--disable-all', '--enable=goimports', '--enable=misspell', '--enable=staticcheck', '--enable=unused']
+'''
+
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+if = 'has("python3")'
+depends = 'context_filetype.vim'
+on_event = 'InsertCharPre'
+hook_add = '''
+    set runtimepath+=~/.config/nvim/plugged/deoplete.nvim/
+    let g:deoplete#enable_at_startup = 1
+    let g:deoplete#auto_complete_delay = 0
+    let g:deoplete#auto_complete_start_length = 1
+    let g:deoplete#enable_camel_case = 0
+    let g:deoplete#enable_ignore_case = 0
+    let g:deoplete#enable_refresh_always = 0
+    let g:deoplete#enable_smart_case = 1
+    let g:deoplete#file#enable_buffer_path = 1
+    let g:deoplete#max_list = 10000
+    let deoplete#tag#cache_limit_size = 5000000
+    let g:deoplete#sources = {}
+    let g:deoplete#sources._ = []
+    let g:deoplete#omni#input_patterns = {}
+    let g:deoplete#sources#dictionary#dictionaries = {}
+
+    let g:deoplete#omni#input_patterns.scala = [
+        \ '[^. *\t]\.\w*',
+        \ '[:\[,] ?\w*',
+        \ '^import .*'
+        \] 
+    let g:deoplete#sources#dictionary#dictionaries = {
+        \ 'scala' : $HOME . '/.config/nvim/dict/scala.dict',
+        \ }
+
+
+    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    function! s:my_cr_function()
+        return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+    endfunction
+    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+'''
+
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+hook_add = '''
+    let g:neosnippet#snippets_directory = '~/.cache/dein/repos/github.com/Shougo/neosnippet-snippets/neosnippets'
+    imap <C-k> <Plug>(neosnippet_expand_or_jump)
+    smap <C-k> <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k> <Plug>(neosnippet_expand_target)
+'''
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+hook_add = '''
+    let g:lightline = { 
+    \   'colorscheme': 'wombat'
+    \}
+'''
+
+[[plugins]]
+repo = 'sjl/badwolf'
+
+[[plugins]]
+repo = 'kien/ctrlp.vim'
+
+[[plugins]]
+repo = 'fatih/vim-go'
+hook_add = '''
+    let g:go_play_open_browser = 0
+    let g:go_fmt_fail_silently = 1
+    let g:go_fmt_autosave = 1
+    let g:go_fmt_command = "goimports"
+    let g:go_disable_autoinstall = 1
+    let g:go_snippet_engine = "neosnippet"
+    let g:go_template_use_pkg = 1
+'''
+
+[[plugins]]
+repo = 'zchee/deoplete-go''
+hook_post_source = '''
+    let g:dein#plugin.build = make
+'''
+
+[[plugins]]
+repo = 'derekwyatt/vim-scala'
+
+[[plugins]]
+repo = 'ensime/ensime-vim'
+
+[[plugins]]
+repo = 'cespare/vim-toml'
+
+[[plugins]]
+repo = 'moll/vim-node'
+ 
+ [[plugins]]
+repo = 'marijnh/tern_for_vim'
+build = 'npm install'
+
+[[plugins]]
+repo = 'benjie/neomake-local-eslint.vim'
+
+[[plugins]]
+repo = 'hashivim/vim-terraform'
+hook_add = '''
+    let g:terraform_align = 1
+'''
