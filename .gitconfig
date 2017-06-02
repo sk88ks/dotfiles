@@ -1,0 +1,24 @@
+[ghq]
+	root = ~/work/src
+	root = ~/go/src
+[core]
+	excludesfile = ~/.gitignore_global
+	editor = /usr/local/bin/nvim
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
+[user]
+	name = Shun Kokubo
+	email = sk88ks@users.noreply.github.com
+[alias]
+	appraise = !~/go/bin/git-appraise
+    tree = log --graph --decorate --oneline --branches --tags --remotes --date=short -C -M 
+    #tree = log --graph --date-order --date=short -C -M --oneline --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
+    #graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
