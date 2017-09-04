@@ -180,4 +180,4 @@ set background=dark
 
 " tags
 ""nnoremap <Space>dv :vsp<CR> :exe("tjump ".expand('<cword>'))<CR>
-""nnoremap <C-k> :split<CR> :exe("tjump ".expand('<cword>'))<CR>
+""nnoremap <C-k> :split<CR> :exe("tjump ".expand('<cword>'))<CR> 

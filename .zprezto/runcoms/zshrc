@@ -36,6 +36,7 @@ export SCALA_HOME=$SCALAENV_ROOT/versions/$SCALAENV_VERSION
 # Spark
 #export SPARK_PATH=/usr/local/src/Spark/bin
 #export SPARK_HOME=/usr/local/Cellar/apache-spark/1.6.1
+export PATH="$PATH:/usr/local/opt/apache-spark@1.6/bin"
 
 # NGROK
 export NGROK_PATH=/usr/local/ngrok
@@ -48,8 +49,9 @@ export LANG=ja_JP.UTF-8
 export CATALINA_HOME='/usr/local/Cellar/tomcat/7.0.42/libexec'
 # Golang
 #export GOROOT=/usr/local/go
-export GOENV_VERSION=`goenv version-name`
-export GOROOT=$GOENV_ROOT/versions/$GOENV_VERSION
+unset GOENV_VERSION
+export GO_GLOBAL_VERSION=`goenv version-name`
+export GOROOT=$GOENV_ROOT/versions/$GO_GLOBAL_VERSION
 export GOPATH=$HOME/go
 
 # Rust 
@@ -60,11 +62,12 @@ export GOPATH=$HOME/go
 export NIMROOT=/usr/local/Nim
 
 # Gradle
-GRADLE_PATH=/usr/local/gradle/gradle-2.14.1
+#GRADLE_PATH=/usr/local/gradle/gradle-2.14.1
 
 export FBSPATH='/usr/local/flatbuffers/Debug'
 export LANG=ja_JP.UTF-8
 export EDITOR='nvim'
+export VISUAL='nvim'
 export SHELL='zsh'
 
 export XDG_CONFIG_HOME=$HOME/.config
@@ -304,9 +307,32 @@ docker-enter() {
 #ulimit -n 65536 65536
 #source ~/.tmuxinator/tmuxinator.zsh
 
+# helm ompletion
+source <(helm completion zsh)
+
+# direnv
+eval "$(direnv hook zsh)"
+
+# powerline-go
+#function powerline_precmd() {
+#    PS1="$(~/.powerline/powerline-go -error $? -shell zsh --cwd-mode plain)"
+#}
+#
+#function install_powerline_precmd() {
+#  for s in "${precmd_functions[@]}"; do
+#    if [ "$s" = "powerline_precmd" ]; then
+#      return
+#    fi
+#  done
+#  precmd_functions+=(powerline_precmd)
+#}
+#
+#if [ "$TERM" != "linux" ]; then
+#    install_powerline_precmd
+#fi
+
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/a12658/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/a12658/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/a12658/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/a12658/google-cloud-sdk/completion.zsh.inc'; fi
-

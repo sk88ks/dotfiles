@@ -1,15 +1,40 @@
 [[plugins]]
 repo = 'Shougo/dein.vim'
  
- [[plugins]]
-repo = 'neomake/neomake'
+[[plugins]]
+repo = 'sjl/badwolf'
+ 
+#[[plugins]]
+#repo = 'neomake/neomake'
+#hook_add = '''
+#    autocmd! BufWritePost * Neomake
+#    let g:neomake_verbose = 2
+#    let g:neomake_open_list = 2
+#    let g:neomake_place_signs = 0
+#    let g:neomake_go_enabled_makers = ['goimports', 'gometalinter']
+#    let g:neomake_go_gometalinter_args = ['--disable-all', '--enable=goimports', '--enable=misspell', '--enable=staticcheck', '--enable=unused']
+#'''
+
+[[plugins]]
+repo = 'w0rp/ale'
 hook_add = '''
-    autocmd! BufWritePost * Neomake
-    let g:neomake_verbose = 2
-    let g:neomake_open_list = 2
-    let g:neomake_place_signs = 0
-    let g:neomake_go_enabled_makers = ['goimports', 'gometalinter']
-    let g:neomake_go_gometalinter_args = ['--disable-all', '--enable=goimports', '--enable=misspell', '--enable=staticcheck', '--enable=unused']
+    let g:ale_lint_on_save = 1
+    let g:ale_lint_on_enter = 0
+    let g:ale_lint_on_text_changed = 0
+    let g:ale_fix_on_save = 1
+    let g:ale_set_loclist = 0
+    let g:ale_set_quickfix = 1
+    let g:ale_sign_column_always = 1
+    let g:ale_open_list = 1
+    let g:ale_keep_list_window_open = 0
+    let g:ale_linters = {}
+    let g:ale_fixers = {}
+
+    let g:ale_linters.go = ['gometalinter']
+    let g:ale_go_gometalinter_options = '--fast --enable=goimports --enable=gofmt --enable=misspell --enable=staticcheck --enable=unused --enable=goconst'               
+
+    let g:ale_linters.python = ['flake8']
+    let g:ale_fixers.python = ['isort', "autopep8", 'yapf']
 '''
 
 [[plugins]]
@@ -55,6 +80,14 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'Shougo/denite.nvim'
+hook_add = '''
+    nnoremap <silent> ,g  :<C-u>Denite -auto_preview grep -buffer-name=search-buffer-denite<CR>
+    nnoremap <silent> ,un :<C-u>Denite -resume -buffer-name=search-buffer-denite -select=+1 -immediately<CR>
+    nnoremap <silent> ,up :<C-u>Denite -resume -buffer-name=search-buffer-denite -select=-1 -immediately<CR>
+'''
+
+[[plugins]]
 repo = 'Shougo/neosnippet-snippets'
 
 [[plugins]]
@@ -69,16 +102,30 @@ hook_add = '''
 [[plugins]]
 repo = 'itchyny/lightline.vim'
 hook_add = '''
+    set laststatus=2
     let g:lightline = { 
-    \   'colorscheme': 'wombat'
+        \'colorscheme': 'wombat',
+        \'active': {
+        \  'left': [
+        \    ['mode', 'paste'],
+        \    ['readonly', 'filename', 'modified', 'ale'],
+        \  ]
+        \},
+        \'component_function': {
+        \  'ale': 'ALEGetStatusLine',
+        \  'filename': 'LightLineFilename',
+        \}
     \}
+    function! LightLineFilename()
+        return expand('%:p:h')
+    endfunction
 '''
 
 [[plugins]]
-repo = 'sjl/badwolf'
-
-[[plugins]]
 repo = 'kien/ctrlp.vim'
+hook_add = '''
+    let g:ctrlp_dotfiles = 1
+'''
 
 [[plugins]]
 repo = 'fatih/vim-go'
@@ -99,10 +146,34 @@ hook_post_source = '''
 '''
 
 [[plugins]]
+repo = 'davidhalter/jedi'
+ 
+[[plugins]]
+repo = 'zchee/deoplete-jedi'
+
+[[plugins]]
+repo = 'jmcantrell/vim-virtualenv'
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+hook_add = '''
+    nmap <silent> <C-q>      :NERDTreeToggle<CR>
+    vmap <silent> <C-q> <Esc>:NERDTreeToggle<CR>
+    omap <silent> <C-q>      :NERDTreeToggle<CR>
+    imap <silent> <C-q> <Esc>:NERDTreeToggle<CR>
+    cmap <silent> <C-q> <C-u>:NERDTreeToggle<CR>
+    
+    let NERDTreeShowHidden=1
+'''
+
+[[plugins]]
 repo = 'derekwyatt/vim-scala'
 
 [[plugins]]
 repo = 'ensime/ensime-vim'
+
+[[plugins]]
+repo =  'stephpy/vim-yaml'
 
 [[plugins]]
 repo = 'cespare/vim-toml'
@@ -122,3 +193,28 @@ repo = 'hashivim/vim-terraform'
 hook_add = '''
     let g:terraform_align = 1
 '''
+
+[[plugins]]
+repo = 'godlygeek/tabular'
+
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+
+[[plugins]]
+repo = 'ekalinin/Dockerfile.vim'
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+hook_add = '''
+    nnoremap [fugitive]  <Nop>
+    nmap <space>g [fugitive]
+    nnoremap <silent> [fugitive]s :Gstatus<CR><C-w>T
+    nnoremap <silent> [fugitive]a :Gwrite<CR>
+    nnoremap <silent> [fugitive]c :Gcommit-v<CR>
+    nnoremap <silent> [fugitive]b :Gblame<CR>
+    nnoremap <silent> [fugitive]d :Gdiff<CR>
+    nnoremap <silent> [fugitive]m :Gmerge<CR>
+'''
+
+[[plugins]]
+repo = 'uarun/vim-protobuf'
