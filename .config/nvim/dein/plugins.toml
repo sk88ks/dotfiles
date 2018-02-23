@@ -12,7 +12,7 @@ repo = 'sjl/badwolf'
 #    let g:neomake_open_list = 2
 #    let g:neomake_place_signs = 0
 #    let g:neomake_go_enabled_makers = ['goimports', 'gometalinter']
-#    let g:neomake_go_gometalinter_args = ['--disable-all', '--enable=goimports', '--enable=misspell', '--enable=staticcheck', '--enable=unused']
+#    let g:neomake_go_gometalinter_args = ['--enable=deadcode','--enable=gas','--enable=goconst','--enable=gocyclo','--enable=goimports','--enable=gofmt','--enable=gotype','--enable=misspell','--enable=govet','--enable=golint','--enable=megacheck']
 #'''
 
 [[plugins]]
@@ -31,10 +31,25 @@ hook_add = '''
     let g:ale_fixers = {}
 
     let g:ale_linters.go = ['gometalinter']
-    let g:ale_go_gometalinter_options = '--fast --enable=goimports --enable=gofmt --enable=misspell --enable=staticcheck --enable=unused --enable=goconst'               
+    let g:ale_go_gometalinter_options = '
+        \ --disable-all
+        \ --enable=gocyclo
+        \ --enable=gotype
+        \ --enable=gotypex
+        \ --enable=unparam
+        \ --enable=deadcode
+        \ --enable=goconst
+        \ --enable=megacheck
+        \ --enable=goimports
+        \ --enable=gas
+        \ --enable=golint
+        \ --enable=misspell
+        \ --enable=vetshadow
+        \ --enable=gofmt
+        \ '
 
     let g:ale_linters.python = ['flake8']
-    let g:ale_fixers.python = ['isort', "autopep8", 'yapf']
+    let g:ale_fixers.python = ['isort', 'autopep8', 'yapf']
 '''
 
 [[plugins]]
@@ -104,7 +119,7 @@ repo = 'itchyny/lightline.vim'
 hook_add = '''
     set laststatus=2
     let g:lightline = { 
-        \'colorscheme': 'wombat',
+        \'colorscheme': 'powerline',
         \'active': {
         \  'left': [
         \    ['mode', 'paste'],
@@ -113,11 +128,26 @@ hook_add = '''
         \},
         \'component_function': {
         \  'ale': 'ALEGetStatusLine',
-        \  'filename': 'LightLineFilename',
+        \  'filename': 'MyFilename',
         \}
     \}
-    function! LightLineFilename()
-        return expand('%:p:h')
+    function! MyFilename()
+        let p = substitute(expand('%:p'), $HOME, '~', '')
+        let name = ""
+	    let subs = split(p, "/") 
+	    let i = 1
+	    for s in subs
+	    	let parent = name
+	    	if  i == len(subs)
+	    		let name = parent . '/' . s
+	    	elseif i == 1
+	    		let name = s
+	    	else
+	    		let name = parent . '/' . s
+	    	endif
+	    	let i += 1
+	    endfor
+        return name
     endfunction
 '''
 
@@ -146,6 +176,9 @@ hook_post_source = '''
 '''
 
 [[plugins]]
+repo = 'buoto/gotests-vim'
+
+[[plugins]]
 repo = 'davidhalter/jedi'
  
 [[plugins]]
@@ -153,6 +186,12 @@ repo = 'zchee/deoplete-jedi'
 
 [[plugins]]
 repo = 'jmcantrell/vim-virtualenv'
+
+[[plugins]]
+repo = 'mhartington/nvim-typescript'
+
+[[plugins]]
+repo = 'leafgarland/typescript-vim'
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'
@@ -218,3 +257,12 @@ hook_add = '''
 
 [[plugins]]
 repo = 'uarun/vim-protobuf'
+
+[[plugins]]
+repo = 'tyru/open-browser.vim'
+
+[[plugins]]
+repo = 'kannokanno/previm'
+
+[[plugins]]
+repo = 'dag/vim-fish'

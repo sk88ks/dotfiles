@@ -15,9 +15,11 @@ set incsearch           " Incremental search
 set hlsearch            " Highlight search match
 
 " Completion for brackets
-inoremap { {}<LEFT>
-inoremap [ []<LEFT>
+inoremap { {}<Left>
+inoremap {<Enter> {}<Left><CR><ESC><S-o>
 inoremap ( ()<LEFT>
+inoremap (<Enter> ()<Left><CR><ESC><S-o>
+inoremap [ []<LEFT>
 inoremap " ""<LEFT>
 inoremap ' ''<LEFT>
 vnoremap { "zdi^V{<C-R>z}<ESC>
@@ -82,6 +84,9 @@ set hidden              " Hide buffer
 set switchbuf=useopen   " Reuse buffer
 set showmatch           " Highlight brackets
 set matchtime=3         " Highlight for 3 seconds
+set visualbell          " no beep
+set smarttab            " smart tags
+set smartindent         " Smart indent
 
 " Ignore swap and backup file
 set nowritebackup
@@ -109,6 +114,8 @@ autocmd BufWritePost * checktime
 set autoread
 
 " For expressions
+set ttimeout
+set ttimeoutlen=50
 set number
 set wrap 
 set textwidth=0

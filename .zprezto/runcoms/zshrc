@@ -13,9 +13,23 @@ fi
 # Customize to your needs...
 
 # anyenv
-export ANYENV_ROOT=$HOME/.anyenv
-export PATH="$ANYENV_ROOT/bin:$PATH"
-eval "$(anyenv init -)"
+#export ANYENV_ROOT=$HOME/.anyenv
+#export PATH="$ANYENV_ROOT/bin:$PATH"
+#eval "$(anyenv init -)"
+ 
+# 環境変数
+export LANG=ja_JP.UTF-8
+export CATALINA_HOME='/usr/local/Cellar/tomcat/7.0.42/libexec'
+# Golang
+#export GOROOT=/usr/local/go
+#unset GOENV_VERSION
+#export GO_GLOBAL_VERSION=`goenv version-name`
+#export GOROOT=$GOENV_ROOT/versions/$GO_GLOBAL_VERSION
+export GOPATH=$HOME/go
+export GOROOT=$HOME/work/src/github.com/golang/go
+
+# istio
+export PATH=$PATH:$HOME/istio-0.2.12/bin
 
 # TERRAFORM
 #export TERRAFORM_PATH=/usr/local/terraform
@@ -25,7 +39,7 @@ eval "$(anyenv init -)"
 #
 # JAVA
 #export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
-jenv enable-plugin export
+#jenv enable-plugin export
 
 # Scala
 #export SCALA_PATH=/usr/local/src/scala/bin
@@ -44,15 +58,10 @@ export NGROK_PATH=/usr/local/ngrok
 # gitql
 export DYLD_LIBRARY_PATH=~/go/src/github.com/cloudson/gitql/libgit2/install/lib
 
-# 環境変数
-export LANG=ja_JP.UTF-8
-export CATALINA_HOME='/usr/local/Cellar/tomcat/7.0.42/libexec'
-# Golang
-#export GOROOT=/usr/local/go
-unset GOENV_VERSION
-export GO_GLOBAL_VERSION=`goenv version-name`
-export GOROOT=$GOENV_ROOT/versions/$GO_GLOBAL_VERSION
-export GOPATH=$HOME/go
+# hub
+eval "$(hub alias -s)"
+if [ -f $GOPATH/src/github.com/github/hub/etc/hub.zsh_completion ]; then source $GOPATH/src/github.com/github/hub/etc/hub.zsh_completion; fi
+
 
 # Rust 
 ## Cargo
@@ -117,7 +126,7 @@ export BENTOPATH='/usr/local/Bento4-SDK'
 #export DOCKER_CERT_PATH="/Users/a12658/.docker/machine/machines/default"
 #export DOCKER_MACHINE_NAME="default"
 
-export PATH=$PATH:$GOPATH/bin:$FBSPATH:$EBCLIPATH:$NGROK_PATH:$NIMROOT/bin:$BENTOPATH/bin:$SCALA_HOME/bin#:$GRADLE_PATH/bin
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$FBSPATH:$EBCLIPATH:$NGROK_PATH:$NIMROOT/bin:$BENTOPATH/bin:$SCALA_HOME/bin:/usr/local/opt/ncurses/bin#:$GRADLE_PATH/bin
 
 ##alias
 alias redis=redis_init_script
@@ -193,11 +202,6 @@ if [ $? -eq 0 ]; then
     mkdir -p ~/.virtualenvs
     export WORKON_HOME=~/.virtualenvs
     export PIP_RESPECT_VIRTUALENV=true
-fi
-
-# Pythonz
-if [ -s $HOME/.pythonz/etc/bashrc ]; then
-    source $HOME/.pythonz/etc/bashrc
 fi
 
 # for Golang
@@ -330,6 +334,10 @@ eval "$(direnv hook zsh)"
 #if [ "$TERM" != "linux" ]; then
 #    install_powerline_precmd
 #fi
+
+# gcloud
+export CLOUDSDK_PYTHON_SITEPACKAGES=1
+export CLOUDSDK_CONTAINER_USE_CLIENT_CERTIFICATE=True
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/a12658/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/a12658/google-cloud-sdk/path.zsh.inc'; fi
