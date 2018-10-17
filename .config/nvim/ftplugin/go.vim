@@ -3,6 +3,11 @@ let g:deoplete#sources#go#use_cache = 1
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 let g:deoplete#sources#go#pointer = 1
 
+" vim-go
+let g:go_metalinter_command = ""
+let g:go_metalinter_enabled = ["gotype", "gotypex", "unparam", "deadcode", "goconst", "megacheck", "goimports", "golint", "misspell", "vetshadow", "gofmt"]
+let g:go_metalinter_path = "./..."
+
 nmap <Space>i <Plug>(go-info)
 nmap <Space>k <Plug>(go-doc)
 nmap <Space>kv <Plug>(go-doc-vertical)

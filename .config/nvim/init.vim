@@ -2,8 +2,8 @@
 let g:cache_home = empty($XDG_CACHE_HOME) ? expand('$HOME/.cache') : $XDG_CACHE_HOME
 let g:config_home = empty($XDG_CONFIG_HOME) ? expand('$HOME/.config') : $XDG_CONFIG_HOME
 
-let g:python_host_prog = $HOME . '/.anyenv/envs/pyenv/versions/neovim2/bin/python'
-let g:python3_host_prog = $HOME . '/.anyenv/envs/pyenv/versions/neovim3/bin/python'
+let g:python_host_prog = $HOME . '/.pyenv/versions/neovim2/bin/python'
+let g:python3_host_prog = $HOME . '/.pyenv/versions/neovim3/bin/python'
 
 " Completion for command mode
 set wildmode=longest:full,list
@@ -62,10 +62,10 @@ vnoremap gc ;<C-u>normal gc<Enter>
 onoremap gc ;<C-u>normal gc<Enter> 
 
 " Move windows
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+""nnoremap <C-h> <C-w>h
+""nnoremap <C-j> <C-w>j
+""nnoremap <C-k> <C-w>k
+""nnoremap <C-l> <C-w>l
   
 " As super user
 cmap w!! w !sudo tee > /dev/null %
@@ -188,3 +188,10 @@ set background=dark
 " tags
 ""nnoremap <Space>dv :vsp<CR> :exe("tjump ".expand('<cword>'))<CR>
 ""nnoremap <C-k> :split<CR> :exe("tjump ".expand('<cword>'))<CR> 
+ 
+" Ctrlp
+if executable('rg')
+  set grepprg=rg\ --color=never
+  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+  let g:ctrlp_use_caching = 0
+endif

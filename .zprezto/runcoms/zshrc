@@ -44,8 +44,8 @@ export PATH=$PATH:$HOME/istio-0.2.12/bin
 # Scala
 #export SCALA_PATH=/usr/local/src/scala/bin
 #export SCALA_HOME=/usr/local/Cellar/scala/2.11.8
-export SCALAENV_VERSION=`scalaenv version-name`
-export SCALA_HOME=$SCALAENV_ROOT/versions/$SCALAENV_VERSION
+#export SCALAENV_VERSION=`scalaenv version-name`
+#export SCALA_HOME=$SCALAENV_ROOT/versions/$SCALAENV_VERSION
 
 # Spark
 #export SPARK_PATH=/usr/local/src/Spark/bin
@@ -190,10 +190,12 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
                    /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
 
 ## pyenv
+export PYENV_ROOT=$HOME/.pyenv
+export PATH=$PATH:$PYENV_ROOT/bin
 if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 
-## pyenv-virtualenv
-#if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+# pyenv-virtualenv
+if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 ## virtualenv, virtualenvwrapper
 which virtualenvwrapper.sh > /dev/null
@@ -203,6 +205,11 @@ if [ $? -eq 0 ]; then
     export WORKON_HOME=~/.virtualenvs
     export PIP_RESPECT_VIRTUALENV=true
 fi
+
+# nodenv
+export NODENV_ROOT=$HOME/.nodenv
+export PATH=$PATH:$NODENV_ROOT/bin
+if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 
 # for Golang
 if [ -f /usr/local/go/misc/zsh/go ]; then
@@ -337,10 +344,13 @@ eval "$(direnv hook zsh)"
 
 # gcloud
 export CLOUDSDK_PYTHON_SITEPACKAGES=1
-export CLOUDSDK_CONTAINER_USE_CLIENT_CERTIFICATE=True
+#export CLOUDSDK_CONTAINER_USE_CLIENT_CERTIFICATE=True
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/a12658/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/a12658/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/a12658/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/a12658/google-cloud-sdk/completion.zsh.inc'; fi
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/vault vault
