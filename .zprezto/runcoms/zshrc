@@ -5,6 +5,21 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
+function _reset_path {
+  local p
+  for p in PATH;do
+    local ip=$(eval echo "\$INIT_$p")
+    if [ -z "$ip" ];then
+      # Set initial values
+      eval export INIT_$p="\$$p"
+    else
+      # Reset paths
+      eval export $p="$ip"
+    fi
+  done
+}
+_reset_path
+
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
@@ -16,7 +31,7 @@ fi
 #export ANYENV_ROOT=$HOME/.anyenv
 #export PATH="$ANYENV_ROOT/bin:$PATH"
 #eval "$(anyenv init -)"
- 
+
 # 環境変数
 export LANG=ja_JP.UTF-8
 export CATALINA_HOME='/usr/local/Cellar/tomcat/7.0.42/libexec'
@@ -59,11 +74,11 @@ export NGROK_PATH=/usr/local/ngrok
 export DYLD_LIBRARY_PATH=~/go/src/github.com/cloudson/gitql/libgit2/install/lib
 
 # hub
-eval "$(hub alias -s)"
-if [ -f $GOPATH/src/github.com/github/hub/etc/hub.zsh_completion ]; then source $GOPATH/src/github.com/github/hub/etc/hub.zsh_completion; fi
+function git(){hub "$@"}
+#if [ -f $GOPATH/src/github.com/github/hub/etc/hub.zsh_completion ]; then source $GOPATH/src/github.com/github/hub/etc/hub.zsh_completion; fi
 
 
-# Rust 
+# Rust
 ## Cargo
 #source ~/.cargo/env
 
@@ -86,7 +101,7 @@ export XDG_CACHE_HOME=$HOME/.cache
 #export AWS_ACCESS_KEY_ID=myproject
 #export AWS_SECRET_ACCESS_KEY=myproject
 #export AWS_DEFAULT_REGION='us-east-1'
- 
+
 #iterm
 #color setting
 
@@ -107,7 +122,7 @@ export XDG_CACHE_HOME=$HOME/.cache
 #    fi
 #fi
 #zstyle ':completion:*' file-colors list-colors ${LSCOLORS}
- 
+
 #complete -C aws_completer aws
 
 #EB CLI
@@ -197,6 +212,8 @@ if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 # pyenv-virtualenv
 if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
+[ -f ~/work/src/github.com/pyenv/pyenv/completions/pyenv.zsh ] && source ~/work/src/github.com/pyenv/pyenv/completions/pyenv.zsh
+
 ## virtualenv, virtualenvwrapper
 which virtualenvwrapper.sh > /dev/null
 if [ $? -eq 0 ]; then
@@ -230,9 +247,6 @@ fi
 # added by travis gem
 [ -f /Users/A12658/.travis/travis.sh ] && source /Users/A12658/.travis/travis.sh
 
-# hub
-#eval "$(hub alias -s)"
-
 # ghq peco
 function peco-src () {
   local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
@@ -243,7 +257,7 @@ function peco-src () {
   zle clear-screen
 }
 zle -N peco-src
-bindkey '^]' peco-src
+bindkey "^p" peco-src
 
 
 #peco
@@ -262,7 +276,7 @@ function peco_select_history() {
 }
 zle -N peco_select_history
 bindkey '^r' peco_select_history
- 
+
 #function peco-src () {
 #  local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
 #  if [ -n "$selected_dir" ]; then
@@ -275,12 +289,12 @@ bindkey '^r' peco_select_history
 #bindkey '^]' peco-src
 
 ##git prompt
-## vcs_infoロード    
-#autoload -Uz vcs_info    
-## PROMPT変数内で変数参照する    
-#setopt prompt_subst    
+## vcs_infoロード
+#autoload -Uz vcs_info
+## PROMPT変数内で変数参照する
+#setopt prompt_subst
 #
-## vcsの表示    
+## vcsの表示
 ## %s version management system name
 ## %b branch name
 #zstyle ':vcs_info:git:*' check-for-changes true
@@ -288,15 +302,17 @@ bindkey '^r' peco_select_history
 #zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
 #zstyle ':vcs_info:*' formats "%F{green}%c%u%b%f"
 #zstyle ':vcs_info:*' actionformats '[%b|%a]'
-## プロンプト表示直前にvcs_info呼び出し    
-#precmd() { vcs_info }    
-## プロンプト表示    
-#PROMPT='%{${fg[cyan]}%}[%n@%m]%{${reset_color}%}%~ <${vcs_info_msg_0_}> 
+## プロンプト表示直前にvcs_info呼び出し
+#precmd() { vcs_info }
+## プロンプト表示
+#PROMPT='%{${fg[cyan]}%}[%n@%m]%{${reset_color}%}%~ <${vcs_info_msg_0_}>
 #%# '
 
 # tag
-export TAG_CMD_FMT_STRING="nv {{.Filename}} +{{.LineNumber}}"
+
 if (( $+commands[tag] )); then
+  export TAG_CMD_FMT_STRING="nv {{.Filename}} +{{.LineNumber}}"
+  export TAG_SEARCH_PROG=ag
   tag() { command tag "$@"; source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null }
   alias ag=tag
 fi
@@ -305,7 +321,7 @@ fi
 docker-enter() {
   boot2docker ssh '[ -f /var/lib/boot2docker/nsenter ] || docker run --rm -v /var/lib/boot2docker/:/target jpetazzo/nsenter'
   boot2docker ssh -t sudo /var/lib/boot2docker/docker-enter "$@"
-} 
+}
 
 # added by travis gem
 [ -f /Users/a12658/.travis/travis.sh ] && source /Users/a12658/.travis/travis.sh
@@ -319,10 +335,15 @@ docker-enter() {
 #source ~/.tmuxinator/tmuxinator.zsh
 
 # helm ompletion
+#export PATH=$PATH:$HOME/src/helm2.8.2
+export PATH=$PATH:$HOME/src/helm2.12.3
 source <(helm completion zsh)
 
 # direnv
 eval "$(direnv hook zsh)"
+
+# protoc-gen-doc
+export PATH=$PATH:$HOME/src/protoc-gen-doc-1.1.0.darwin-amd64.go1.10
 
 # powerline-go
 #function powerline_precmd() {
@@ -346,11 +367,11 @@ eval "$(direnv hook zsh)"
 export CLOUDSDK_PYTHON_SITEPACKAGES=1
 #export CLOUDSDK_CONTAINER_USE_CLIENT_CERTIFICATE=True
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/a12658/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/a12658/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/a12658/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/a12658/google-cloud-sdk/completion.zsh.inc'; fi
-
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/vault vault
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/a12658/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/a12658/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/a12658/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/a12658/google-cloud-sdk/completion.zsh.inc'; fi

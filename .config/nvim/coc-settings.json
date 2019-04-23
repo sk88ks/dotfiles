@@ -1,0 +1,21 @@
+{
+  "languageserver": {
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": ["go.mod, .vim/, .git/, .hg/"],
+      "filetypes": ["go"]
+    }
+  },
+  "python.autoComplete.addBrackets": true,
+  "python.venvPath": "~/.pyenv",
+  "python.formatting.provider": "yapf",
+  "python.jediEnabled": false,
+  "yaml.format.enable": true,
+  "yaml.completion": true,
+  "yaml.hover": true,
+  "yaml.schemas": {
+    "http://json.schemastore.org/composer": "/*",
+    "kubernetes": "/*.yaml"
+  },
+  "coc.preferences.formatOnSaveFiletypes": ["go"]
+}

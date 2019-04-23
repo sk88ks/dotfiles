@@ -5,9 +5,11 @@ let g:config_home = empty($XDG_CONFIG_HOME) ? expand('$HOME/.config') : $XDG_CON
 let g:python_host_prog = $HOME . '/.pyenv/versions/neovim2/bin/python'
 let g:python3_host_prog = $HOME . '/.pyenv/versions/neovim3/bin/python'
 
+let mapleader = "\<Space>"
+
 " Completion for command mode
 set wildmode=longest:full,list
- 
+
 " For serach
 set ignorecase          " Not destinguish between cases
 set smartcase           " Destinguish between cases in search string
@@ -43,8 +45,8 @@ nnoremap k gk
 vnoremap v $h
 
 " Jump to the haead and end of line
-nnoremap  <Space>h ^
-nnoremap  <Space>l $
+nnoremap  <Leader>h ^
+nnoremap  <Leader>l $
 
 " Add key-mappings
 inoremap jj <Esc>
@@ -59,14 +61,14 @@ vnoremap <Tab> %
 " Select the last word
 nnoremap gc  `[v`]
 vnoremap gc ;<C-u>normal gc<Enter>
-onoremap gc ;<C-u>normal gc<Enter> 
+onoremap gc ;<C-u>normal gc<Enter>
 
 " Move windows
 ""nnoremap <C-h> <C-w>h
 ""nnoremap <C-j> <C-w>j
 ""nnoremap <C-k> <C-w>k
 ""nnoremap <C-l> <C-w>l
-  
+
 " As super user
 cmap w!! w !sudo tee > /dev/null %
 
@@ -87,6 +89,7 @@ set matchtime=3         " Highlight for 3 seconds
 set visualbell          " no beep
 set smarttab            " smart tags
 set smartindent         " Smart indent
+set noeol
 
 " Ignore swap and backup file
 set nowritebackup
@@ -107,7 +110,7 @@ if has('unnamedplus')
 else
     set clipboard& clipboard+=unnamed
 endif
- 
+
 " Auto read
 ""autocmd BufWritePost * sleep 1
 autocmd BufWritePost * checktime
@@ -117,7 +120,7 @@ set autoread
 set ttimeout
 set ttimeoutlen=50
 set number
-set wrap 
+set wrap
 set textwidth=0
 set colorcolumn=80
 set t_vb=
@@ -125,14 +128,27 @@ set novisualbell
 set list
 set listchars=tab:▸\ ,trail:~,eol:↲,extends:»,precedes:«,nbsp:%
 set cursorline
-au  VimEnter,ColorScheme * : highlight CursorLine cterm=underline ctermbg=234      
- 
+au  VimEnter,ColorScheme * : highlight CursorLine cterm=underline ctermbg=234
+
+" open terminal
+nnoremap <silent> <Leader>tt :<C-u>terminal<CR>
+nnoremap <silent> <Leader>ts :<C-u>execute 'split \| terminal'<CR>
+nnoremap <silent> <Leader>tv :<C-u>execute 'vsplit \| terminal'<CR>
+tnoremap <silent> <Leader>ts <C-\><C-n>:execute 'split \| terminal'<CR>
+tnoremap <silent> <Leader>tv <C-\><C-n>:execute 'vsplit \| terminal'<CR>
+
+" to normal mode
+tnoremap <silent> <C-[> <C-\><C-n>
+
+" close terminal
+tnoremap <silent> <C-q> <C-\><C-n>:q<CR>
+
 " Junp to last line
 augroup vimrcEx
   au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
   \ exe "normal g`\"" | endif
 augroup END
- 
+
 " For dein
 let s:dein_cache_dir = g:cache_home . '/dein'
 
@@ -140,7 +156,7 @@ let s:dein_cache_dir = g:cache_home . '/dein'
 ""augroup MyAutoCmd
 ""    autocmd!
 ""augroup END
- 
+
 if &runtimepath !~# '/dein.vim'
     let s:dein_repo_dir = s:dein_cache_dir . '/repos/github.com/Shougo/dein.vim'
 
@@ -151,7 +167,7 @@ if &runtimepath !~# '/dein.vim'
 
     execute 'set runtimepath^=' . s:dein_repo_dir
 endif
- 
+
 " dein.vim settings
 let g:dein#install_max_processes = 16
 let g:dein#install_progress_type = 'title'
@@ -182,16 +198,28 @@ syntax on
 " truecolor
 set termguicolors
 set background=dark
- 
+
 ""au BufNewFile,BufRead *.scala setf scala
 
 " tags
 ""nnoremap <Space>dv :vsp<CR> :exe("tjump ".expand('<cword>'))<CR>
-""nnoremap <C-k> :split<CR> :exe("tjump ".expand('<cword>'))<CR> 
- 
+""nnoremap <C-k> :split<CR> :exe("tjump ".expand('<cword>'))<CR>
+
 " Ctrlp
 if executable('rg')
   set grepprg=rg\ --color=never
   let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
   let g:ctrlp_use_caching = 0
 endif
+
+" Remove unnecessary spaces
+autocmd BufWritePre * call s:remove_unnecessary_space()
+function! s:remove_unnecessary_space()
+    " delete last spaces
+    %s/\s\+$//ge
+
+    " delete last blank lines
+    while getline('$') == ""
+            $delete _
+    endwhile
+endfunction

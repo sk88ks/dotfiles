@@ -1,137 +1,191 @@
 [[plugins]]
 repo = 'Shougo/dein.vim'
- 
+
 [[plugins]]
 repo = 'sjl/badwolf'
- 
-#[[plugins]]
-#repo = 'neomake/neomake'
-#hook_add = '''
-#    autocmd! BufWritePost * Neomake
-#    let g:neomake_verbose = 2
-#    let g:neomake_open_list = 2
-#    let g:neomake_place_signs = 0
-#    let g:neomake_go_enabled_makers = ['goimports', 'gometalinter']
-#    let g:neomake_go_gometalinter_args = ['--enable=deadcode','--enable=gas','--enable=goconst','--enable=gocyclo','--enable=goimports','--enable=gofmt','--enable=gotype','--enable=misspell','--enable=govet','--enable=golint','--enable=megacheck']
-#'''
+
+[[plugins]]
+repo = 'cespare/vim-toml'
+
 
 [[plugins]]
 repo = 'w0rp/ale'
-#hook_add = '''
-#    let g:ale_lint_on_save = 1
-#    let g:ale_lint_on_enter = 0
-#    let g:ale_lint_on_text_changed = 0
-#    let g:ale_fix_on_save = 1
-#    let g:ale_set_loclist = 0
-#    let g:ale_set_quickfix = 1
-#    let g:ale_sign_column_always = 1
-#    let g:ale_open_list = 1
-#    let g:ale_keep_list_window_open = 0
-#    let g:ale_linters = {}
-#    let g:ale_fixers = {}
-#
-#    let g:ale_linters.go = ['gometalinter']
-#    let g:ale_go_gometalinter_options = '
-#        \ --disable-all
-#        \ --enable=gocyclo
-#        \ --enable=gotype
-#        \ --enable=gotypex
-#        \ --enable=unparam
-#        \ --enable=deadcode
-#        \ --enable=goconst
-#        \ --enable=megacheck
-#        \ --enable=goimports
-#        \ --enable=gas
-#        \ --enable=golint
-#        \ --enable=misspell
-#        \ --enable=vetshadow
-#        \ --enable=gofmt
-#        \ '
-#'''
 hook_add = '''
+    let g:ale_lint_on_save = 1
+    let g:ale_lint_on_enter = 0
+    let g:ale_lint_on_text_changed = 0
+    let g:ale_fix_on_save = 1
+    let g:ale_set_loclist = 0
+    let g:ale_set_quickfix = 1
+    let g:ale_sign_column_always = 1
+    let g:ale_open_list = 1
+    let g:ale_keep_list_window_open = 0
     let g:ale_linters = {}
     let g:ale_fixers = {}
- 
-    call ale#linter#Define('go', {
-    \   'name': 'revive',
-    \   'output_stream': 'both',
-    \   'executable': 'revive',
-    \   'read_buffer': 0,
-    \   'command': 'revive %t',
-    \   'callback': 'ale#handlers#unix#HandleAsWarning',
-    \})
- 
+
+    let g:ale_linters.go = ['golangci-lint']
+    let g:ale_go_golangci_lint_package = 1
+    let g:ale_go_golangci_lint_options = '--config ~/.config/golangci-lint/config.yaml'
+    let g:ale_fixers.go = ['goimports']
+
     let g:ale_linters.python = ['flake8']
     let g:ale_fixers.python = ['isort', 'autopep8', 'yapf']
 '''
 
 [[plugins]]
-repo = 'Shougo/context_filetype.vim'
-
-[[plugins]]
-repo = 'Shougo/deoplete.nvim'
-if = 'has("python3")'
-depends = 'context_filetype.vim'
-on_event = 'InsertCharPre'
+repo = 'neoclide/coc.nvim'
+build = 'yarn install --frozen-lockfile'
 hook_add = '''
-    set runtimepath+=~/.config/nvim/plugged/deoplete.nvim/
-    let g:deoplete#enable_at_startup = 1
-    let g:deoplete#auto_complete_delay = 0
-    let g:deoplete#auto_complete_start_length = 1
-    let g:deoplete#enable_camel_case = 0
-    let g:deoplete#enable_ignore_case = 0
-    let g:deoplete#enable_refresh_always = 0
-    let g:deoplete#enable_smart_case = 1
-    let g:deoplete#file#enable_buffer_path = 1
-    let g:deoplete#max_list = 10000
-    let deoplete#tag#cache_limit_size = 5000000
-    let g:deoplete#sources = {}
-    let g:deoplete#sources._ = []
-    let g:deoplete#omni#input_patterns = {}
-    let g:deoplete#sources#dictionary#dictionaries = {}
+    " Use tab for trigger completion with characters ahead and navigate.
+    " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+    inoremap <silent><expr> <TAB>
+          \ pumvisible() ? "\<C-n>" :
+          \ <SID>check_back_space() ? "\<TAB>" :
+          \ coc#refresh()
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-    let g:deoplete#omni#input_patterns.scala = [
-        \ '[^. *\t]\.\w*',
-        \ '[:\[,] ?\w*',
-        \ '^import .*'
-        \] 
-    let g:deoplete#sources#dictionary#dictionaries = {
-        \ 'scala' : $HOME . '/.config/nvim/dict/scala.dict',
-        \ }
-
-
-    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-    function! s:my_cr_function()
-        return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+    function! s:check_back_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~# '\s'
     endfunction
-    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+
+    " Use <c-space> for trigger completion.
+    inoremap <silent><expr> <leader>p coc#refresh()
+
+    " Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
+    " Coc only does snippet and additional edit on confirm.
+    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+    " Use `[c` and `]c` for navigate diagnostics
+    nmap <silent> [c <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+    " Remap keys for gotos
+    nmap <silent> <leader>jd :vsplit \| :call CocActionAsync('jumpDefinition')<CR>
+    nmap <silent> <leader>jy :vsplit \| :call CocActionAsync('jumpTypeDefinition')<CR>
+    nmap <silent> <leader>ji :vsplit \| :call CocActionAsync('jumpImplementation')<CR>
+    nmap <silent> <leader>jr :vsplit \| :call CocActionAsync('jumpReferences')<CR>
+    nnoremap <silent> <leader>sd :call <SID>show_documentation()<CR>
+
+    function! s:show_documentation()
+      if &filetype == 'vim'
+        execute 'h '.expand('<cword>')
+      else
+        call CocAction('doHover')
+      endif
+    endfunction
+
+    " Highlight symbol under cursor on CursorHold
+    autocmd CursorHold * silent call CocActionAsync('highlight')
+
+    " Remap for rename current word
+    nmap <leader>rn <Plug>(coc-rename)
+
+    " Remap for format selected region
+    vmap <leader>f  <Plug>(coc-format-selected)
+    nmap <leader>f  <Plug>(coc-format-selected)
+
+    augroup mygroup
+      autocmd!
+      " Setup formatexpr specified filetype(s).
+      autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+      " Update signature help on jump placeholder
+      autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+    augroup end
+
+    " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+    vmap <leader>a  <Plug>(coc-codeaction-selected)
+    nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+    " Remap for do codeAction of current line
+    nmap <leader>ac  <Plug>(coc-codeaction)
+    " Fix autofix problem of current line
+    nmap <leader>qf  <Plug>(coc-fix-current)
+
+    " Use `:Format` for format current buffer
+    command! -nargs=0 Format :call CocAction('format')
+
+    " Use `:Fold` for fold current buffer
+    command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+
+    " Add diagnostic info for https://github.com/itchyny/lightline.vim
+    let g:lightline = {
+          \ 'colorscheme': 'wombat',
+          \ 'active': {
+          \   'left': [ [ 'mode', 'paste' ],
+          \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+          \ },
+          \ 'component_function': {
+          \   'cocstatus': 'coc#status'
+          \ },
+          \ }
+
+
+
+    " Using CocList
+    " Show all diagnostics
+    nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+    " Manage extensions
+    nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+    " Show commands
+    nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+    " Find symbol of current document
+    nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+    " Search workspace symbols
+    nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+    " Do default action for next item.
+    nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+    " Do default action for previous item.
+    nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+    " Resume latest coc list
+    nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 '''
 
 [[plugins]]
 repo = 'Shougo/denite.nvim'
 hook_add = '''
-    nnoremap <silent> ,g  :<C-u>Denite -auto_preview grep -buffer-name=search-buffer-denite<CR>
-    nnoremap <silent> ,un :<C-u>Denite -resume -buffer-name=search-buffer-denite -select=+1 -immediately<CR>
-    nnoremap <silent> ,up :<C-u>Denite -resume -buffer-name=search-buffer-denite -select=-1 -immediately<CR>
-'''
+    nnoremap [denite] <Nop>
+    nmap <C-c> [denite]
 
-[[plugins]]
-repo = 'Shougo/neosnippet-snippets'
+    " Show files under current dir
+    nnoremap <silent> [denite]f :<C-u>DeniteBufferDir
+          \ -direction=topleft -cursor-wrap=true file file:new<CR>
+    " List buffers
+    nnoremap <silent> [denite]b :<C-u>Denite -direction=topleft -cursor-wrap=true buffer<CR>
+    " List register
+    nnoremap <silent> [denite]r :<C-u>Denite -direction=topleft -cursor-wrap=true -buffer-name=register register<CR>
+    " List recent open files
+    nnoremap <silent> [denite]m :<C-u>Denite -direction=topleft -cursor-wrap=true file_mru<CR>
+    " List bookmark
+    nnoremap <silent> [denite]c :<C-u>Denite -direction=topleft -cursor-wrap=true bookmark<CR>
+    " Add bookmark
+    nnoremap <silent> [denite]a :<C-u>DeniteBookmarkAdd<CR>
 
-[[plugins]]
-repo = 'Shougo/neosnippet.vim'
-hook_add = '''
-    let g:neosnippet#snippets_directory = '~/.cache/dein/repos/github.com/Shougo/neosnippet-snippets/neosnippets'
-    imap <C-k> <Plug>(neosnippet_expand_or_jump)
-    smap <C-k> <Plug>(neosnippet_expand_or_jump)
-    xmap <C-k> <Plug>(neosnippet_expand_target)
+    " .git
+    "nnoremap <silent> [denite]k :<C-u>Denite -direction=topleft -cursor-wrap=true
+    "      \ -path=`substitute(finddir('.git', './;'), '.git', '', 'g')`
+    "      \ file_rec/git<CR>
+
+    call denite#custom#source('file'    , 'matchers', ['matcher_cpsm', 'matcher_fuzzy'])
+
+    call denite#custom#source('buffer'  , 'matchers', ['matcher_regexp'])
+    call denite#custom#source('file_mru', 'matchers', ['matcher_regexp'])
+
+    call denite#custom#alias('source', 'file_rec/git', 'file_rec')
+    call denite#custom#var('file_rec/git', 'command',
+      \ ['git', 'ls-files', '-co', '--exclude-standard'])
+
+    call denite#custom#map('insert', '<C-N>', '<denite:move_to_next_line>', 'noremap')
+    call denite#custom#map('insert', '<C-P>', '<denite:move_to_previous_line>', 'noremap')
+    call denite#custom#map('insert', '<C-W>', '<denite:move_up_path>', 'noremap')
 '''
 
 [[plugins]]
 repo = 'itchyny/lightline.vim'
 hook_add = '''
     set laststatus=2
-    let g:lightline = { 
+    let g:lightline = {
         \'colorscheme': 'powerline',
         \'active': {
         \  'left': [
@@ -147,7 +201,7 @@ hook_add = '''
     function! MyFilename()
         let p = substitute(expand('%:p'), $HOME, '~', '')
         let name = ""
-	    let subs = split(p, "/") 
+	    let subs = split(p, "/")
 	    let i = 1
 	    for s in subs
 	    	let parent = name
@@ -172,87 +226,6 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'fatih/vim-go'
-hook_add = '''
-    let g:go_play_open_browser = 0
-    let g:go_fmt_fail_silently = 1
-    let g:go_fmt_autosave = 1
-    let g:go_fmt_command = "goimports"
-    let g:go_disable_autoinstall = 1
-    let g:go_snippet_engine = "neosnippet"
-    let g:go_template_use_pkg = 1
-'''
-
-[[plugins]]
-repo = 'zchee/deoplete-go'
-build = 'make'
-hook_add = '''
-    let g:deoplete#sources#go#gocode_binary = '~/go/bin/gocode'
-    let g:deoplete#sources#go#source_importer = 1
-'''
-
-[[plugins]]
-repo = 'buoto/gotests-vim'
-
-[[plugins]]
-repo = 'davidhalter/jedi'
- 
-[[plugins]]
-repo = 'zchee/deoplete-jedi'
-
-[[plugins]]
-repo = 'jmcantrell/vim-virtualenv'
-
-[[plugins]]
-repo = 'scrooloose/nerdtree'
-hook_add = '''
-    nmap <silent> <C-q>      :NERDTreeToggle<CR>
-    vmap <silent> <C-q> <Esc>:NERDTreeToggle<CR>
-    omap <silent> <C-q>      :NERDTreeToggle<CR>
-    imap <silent> <C-q> <Esc>:NERDTreeToggle<CR>
-    cmap <silent> <C-q> <C-u>:NERDTreeToggle<CR>
-    
-    let NERDTreeShowHidden=1
-'''
-
-[[plugins]]
-repo = 'derekwyatt/vim-scala'
-
-[[plugins]]
-repo = 'ensime/ensime-vim'
-
-[[plugins]]
-repo =  'stephpy/vim-yaml'
-
-[[plugins]]
-repo = 'cespare/vim-toml'
-
-[[plugins]]
-repo = 'moll/vim-node'
- 
- [[plugins]]
-repo = 'marijnh/tern_for_vim'
-build = 'npm install'
-
-[[plugins]]
-repo = 'benjie/neomake-local-eslint.vim'
-
-[[plugins]]
-repo = 'hashivim/vim-terraform'
-hook_add = '''
-    let g:terraform_align = 1
-'''
-
-[[plugins]]
-repo = 'godlygeek/tabular'
-
-[[plugins]]
-repo = 'plasticboy/vim-markdown'
-
-[[plugins]]
-repo = 'ekalinin/Dockerfile.vim'
-
-[[plugins]]
 repo = 'tpope/vim-fugitive'
 hook_add = '''
     nnoremap [fugitive]  <Nop>
@@ -265,8 +238,32 @@ hook_add = '''
     nnoremap <silent> [fugitive]m :Gmerge<CR>
 '''
 
+#[[plugins]]
+#repo = 'jmcantrell/vim-virtualenv'
+#
+#[[plugins]]
+#repo = 'scrooloose/nerdtree'
+#hook_add = '''
+#    nmap <silent> <C-q>      :NERDTreeToggle<CR>
+#    vmap <silent> <C-q> <Esc>:NERDTreeToggle<CR>
+#    omap <silent> <C-q>      :NERDTreeToggle<CR>
+#    imap <silent> <C-q> <Esc>:NERDTreeToggle<CR>
+#    cmap <silent> <C-q> <C-u>:NERDTreeToggle<CR>
+#
+#    let NERDTreeShowHidden=1
+#'''
+#
 [[plugins]]
-repo = 'uarun/vim-protobuf'
+repo = 'hashivim/vim-terraform'
+hook_add = '''
+    let g:terraform_align = 1
+'''
+#
+[[plugins]]
+repo = 'godlygeek/tabular'
+
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
 
 [[plugins]]
 repo = 'tyru/open-browser.vim'
@@ -274,17 +271,30 @@ repo = 'tyru/open-browser.vim'
 [[plugins]]
 repo = 'kannokanno/previm'
 
+
 [[plugins]]
-repo = 'dag/vim-fish'
+repo = 'ekalinin/Dockerfile.vim'
+
+[[plugins]]
+repo = 'uarun/vim-protobuf'
 
 [[plugins]]
 repo = 'junegunn/vim-easy-align'
 hook_add = '''
     vnoremap <silent> <Enter> :EasyAlign<cr>
-'''       
+'''
+#
+#[[plugins]]
+#repo = 'kylef/apiblueprint.vim'
+#hook_add = '''
+#    autocmd FileType apiblueprint nnoremap <C-b> :call GenerateRefract()<cr>
+#'''
 
 [[plugins]]
-repo = 'kylef/apiblueprint.vim'
-hook_add = '''
-    autocmd FileType apiblueprint nnoremap <C-b> :call GenerateRefract()<cr>
-'''
+repo = 'bronson/vim-trailing-whitespace'
+
+[[plugins]]
+repo = 'bazelbuild/vim-ft-bzl'
+
+[[plugins]]
+repo = 'simeji/winresizer'
