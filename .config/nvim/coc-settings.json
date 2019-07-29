@@ -13,9 +13,7 @@
   "yaml.format.enable": true,
   "yaml.completion": true,
   "yaml.hover": true,
-  "yaml.schemas": {
-    "http://json.schemastore.org/composer": "/*",
-    "kubernetes": "/*.yaml"
-  },
-  "coc.preferences.formatOnSaveFiletypes": ["go"]
+  "yaml.schemas": {},
+  "coc.preferences.formatOnSaveFiletypes": ["go"],
+  "coc.preferences.useQuickfixForLocations": true
 }

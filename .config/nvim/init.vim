@@ -49,9 +49,8 @@ nnoremap  <Leader>h ^
 nnoremap  <Leader>l $
 
 " Add key-mappings
-inoremap jj <Esc>
-inoremap <C-j> <Esc>
-vnoremap <C-j> <Esc>
+inoremap <silent>jj <Esc>
+vnoremap <Leader>j <Esc>
 
 " Tab jump
 nnoremap <Tab> %

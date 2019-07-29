@@ -242,6 +242,7 @@ fi
 
 if [ -f /usr/local/bin/nvim ]; then
     alias nv='/usr/local/bin/nvim'
+    #alias nv='~/src/nvim-osx64/bin/nvim'
 fi
 
 # added by travis gem
@@ -249,12 +250,12 @@ fi
 
 # ghq peco
 function peco-src () {
-  local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
-  if [ -n "$selected_dir" ]; then
-    BUFFER="cd ${selected_dir}"
-    zle accept-line
-  fi
-  zle clear-screen
+    local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
+    if [ -n "$selected_dir" ]; then
+        BUFFER="cd ${selected_dir}"
+        zle accept-line
+    fi
+    zle clear-screen
 }
 zle -N peco-src
 bindkey "^p" peco-src
