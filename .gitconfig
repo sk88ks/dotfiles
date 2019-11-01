@@ -1,12 +1,11 @@
 [ghq]
 	root = ~/work/src
-	root = ~/go/src
 [core]
 	editor = /usr/local/bin/nvim
 	excludesfile = ~/.gitignore_global
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
@@ -19,6 +18,6 @@
 	email = sk88ks@users.noreply.github.com
 [alias]
 	appraise = !~/go/bin/git-appraise
-    tree = log --graph --decorate --oneline --branches --tags --remotes --date=short -C -M 
+    tree = log --graph --decorate --oneline --branches --tags --remotes --date=short -C -M
     #tree = log --graph --date-order --date=short -C -M --oneline --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
     #graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short

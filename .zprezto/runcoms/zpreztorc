@@ -33,6 +33,7 @@ zstyle ':prezto:load' pmodule \
   'utility' \
   'completion' \
   'git' \
+  'syntax-highlighting' \
   'prompt'
 
 #
@@ -191,3 +192,5 @@ zstyle ':prezto:module:prompt' pwd-length 'short'
 
 # Set the default session name:
 # zstyle ':prezto:module:tmux:session' name 'YOUR DEFAULT SESSION NAME'
+
+zstyle ':prezto:module:syntax-highlighting' color 'yes'

@@ -198,6 +198,11 @@ syntax on
 set termguicolors
 set background=dark
 
+highlight Normal ctermbg=NONE guibg=NONE
+highlight NonText ctermbg=NONE guibg=NONE
+highlight SpecialKey ctermbg=NONE guibg=NONE
+highlight EndOfBuffer ctermbg=NONE guibg=NONE
+
 ""au BufNewFile,BufRead *.scala setf scala
 
 " tags
