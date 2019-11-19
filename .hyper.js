@@ -157,7 +157,9 @@ module.exports = {
 
         summon: {hotkey: 'Ctrl+t'},
 
-        themeSettings: {opacity: 0.5, style: 'vador'}
+        themeSettings: {opacity: 1, style: 'vader'},
+
+        hypercwd: {initialWorkingDirectory: '~/'},
     },
 
     // a list of plugins to fetch and install from npm
@@ -167,8 +169,8 @@ module.exports = {
     //   `@company/project`
     //   `project#1.0.1`
     plugins: [
-        'hyperterm-summon', 'an-old-hype', 'hypercwd', 'hyper-tab-icons-plus',
-        'hyper-match'
+        'an-old-hype', 'hyperterm-summon', 'hypercwd', 'hyper-tab-icons-plus',
+        'hyper-match', 'hyperterm-tabs'
     ],
 
     // in development, you can create a directory under

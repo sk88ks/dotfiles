@@ -105,6 +105,9 @@ export XDG_CACHE_HOME=$HOME/.cache
 #iterm
 #color setting
 
+# hyper
+export TERM=xterm
+
 #export CLICOLOR=1
 #export LSCOLORS=DxGxcxdxCxcgcdabagacad
 #
@@ -112,16 +115,16 @@ export XDG_CACHE_HOME=$HOME/.cache
 #unset HISTFILE
 
 # Color
-#export LS_COLORS=gxfxcxdxbxegedabagacad
-#
-#if [ -f ~/.dircolors ]; then
-#    if type dircolors > /dev/null 2>&1; then
-#        eval $(dircolors ~/.dircolors)
-#    elif type gdircolors > /dev/null 2>&1; then
-#        eval $(gdircolors ~/.dircolors)
-#    fi
-#fi
-#zstyle ':completion:*' file-colors list-colors ${LSCOLORS}
+export LS_COLORS=gxfxcxdxbxegedabagacad
+
+if [ -f ~/.dircolors ]; then
+    if type dircolors > /dev/null 2>&1; then
+        eval $(dircolors ~/.dircolors)
+    elif type gdircolors > /dev/null 2>&1; then
+        eval $(gdircolors ~/.dircolors)
+    fi
+fi
+zstyle ':completion:*' file-colors list-colors ${LSCOLORS}
 
 #complete -C aws_completer aws
 

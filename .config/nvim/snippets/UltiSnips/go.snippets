@@ -1,0 +1,232 @@
+# Snippets for Go
+
+priority -50
+
+# when to abbriviate and when not?
+# b doesn't work here, because it ignores whitespace
+# optional local name?
+snippet /^import/ "Import declaration" r
+import (
+	"${1:package}"
+)
+endsnippet
+
+snippet /^package/ "Package declaration" r
+// Package $1 provides ...
+package ${1:main}
+endsnippet
+
+# Mostly converted from: https://github.com/AlanQuatermain/go-tmbundle
+snippet /^cons/ "Constants declaration" r
+const (
+	${1:constant}${2/(.+)/ /}${2:type} = ${0:value}
+)
+endsnippet
+
+snippet /^con/ "Constant declaration" r
+const ${1:name}${2/(.+)/ /}${2:type} = ${0:value}
+endsnippet
+
+snippet iota "Iota constant generator" b
+const (
+	${1:constant}${2/(.+)/ /}${2:type} = iota
+)
+endsnippet
+
+snippet struct "Struct declaration" b
+type ${1:Struct} struct {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet interface "Interface declaration" b
+type ${1:Interface} interface {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet if "If statement" b
+if ${1:condition}${1/(.+)/ /}{
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet switch "Switch statement" b
+switch ${1:expression}${1/(.+)/ /}{
+case$0
+}
+endsnippet
+
+# select
+snippet select "select { case a := <-chan: ... }"
+select {
+case ${1:v1} := <-${2:chan1}
+	${0}
+}
+endsnippet
+
+# functions
+snippet /^main/ "Main function" r
+func main() {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet /^meth/ "Method" r
+func (${1:receiver} ${2:type}) ${3:name}(${4:params})${5/(.+)/ /}${5:type} {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet func "Function" b
+func ${1:name}(${2:params})${3/(.+)/ /}${3:type} {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet funch "HTTP handler" b
+func ${1:handler}(${2:w} http.ResponseWriter, ${3:r} *http.Request) {
+	${0:${VISUAL}}
+}
+endsnippet
+
+# goroutine named function
+snippet go "go someFunc(...)"
+go ${1:funcName}(${0})
+endsnippet
+
+# goroutine anonymous function
+snippet gof "go func() { ... }()"
+go func() {
+	${1:${VISUAL}}
+}()
+${0}
+endsnippet
+
+# make
+snippet make "make(Type, size)"
+make(${1:[]string}, ${2:0})${0}
+endsnippet
+
+# types and variables
+snippet map "Map type" b
+map[${1:keytype}]${2:valtype}
+endsnippet
+
+snippet : "Variable declaration :=" b
+${1:name} := ${0:value}
+endsnippet
+
+snippet var "Variable declaration" b
+var ${1:name}${2/(.+)/ /}${2:type}${3: = ${0:value}}
+endsnippet
+
+snippet vars "Variables declaration" b
+var (
+	${1:name}${2/(.+)/ /}${2:type}${3: = ${0:value} }
+)
+endsnippet
+
+snippet json "JSON field"
+\`json:"${1:displayName}"\`
+endsnippet
+
+# yaml field tag
+snippet yaml "\`yaml:key\`"
+\`yaml:"${1:`!v  go#util#snippetcase(matchstr(getline("."), '\w\+'))`}"\`
+endsnippet
+
+# vim:ft=snippets:
+
+# error handling
+snippet err "Basic error handling" b
+if err != nil {
+	log.${1:Fatal}(err)
+}
+endsnippet
+
+# if inline error
+snippet ife "If with inline erro"
+if err := ${1:condition}; err != nil {
+	${0:${VISUAL}}
+}
+endsnippet
+
+# error snippet
+snippet errn "Error return" !b
+if err != nil {
+	return err
+}
+${0}
+endsnippet
+
+# error log snippet
+snippet errl "Error with log.Fatal(err)" !b
+if err != nil {
+	log.Fatal(err)
+}
+${0}
+endsnippet
+
+# error multiple return
+snippet errn, "Error return with two return values" !b
+if err != nil {
+	return ${1:nil}, ${2:err}
+}
+${0}
+endsnippet
+
+# error panic
+snippet errp "Error panic" !b
+if err != nil {
+	panic(${1})
+}
+${0}
+endsnippet
+
+# error test
+snippet errt "Error test fatal " !b
+if err != nil {
+	t.Fatal(err)
+}
+${0}
+endsnippet
+
+# error handle
+snippet errh "Error handle and return" !b
+if err != nil {
+	${1}
+	return
+}
+${0}
+endsnippet
+
+# Fmt Printf debug
+snippet ff "fmt.Printf(...)"
+fmt.Printf("${1:${VISUAL}} = %+v\n", $1)
+endsnippet
+
+# Fmt Println debug
+snippet fn "fmt.Println(...)"
+fmt.Println("${1:${VISUAL}}")
+endsnippet
+
+# Fmt Errorf debug
+snippet fe "fmt.Errorf(...)"
+fmt.Errorf("${1:${VISUAL}}")
+endsnippet
+
+# log printf
+snippet lf "log.Printf(...)"
+log.Printf("${1:${VISUAL}} = %+v\n", $1)
+endsnippet
+
+# log println
+snippet ln "log.Println(...)"
+log.Println("${1:${VISUAL}}")
+endsnippet
+
+# sprintf
+snippet sp "fmt.Sprintf(...)"
+fmt.Sprintf("%${1:s}", ${2:var})
+endsnippet

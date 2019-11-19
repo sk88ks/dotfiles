@@ -35,26 +35,74 @@ repo = 'cespare/vim-toml'
 #    augroup END
 #'''
 
-[[plugins]]
-repo = 'autozimu/LanguageClient-neovim'
-build = 'bash install.sh'
-rev = 'next'
-depends = ['fzf.vim']
-hook_add = '''
-  set hidden
-  set signcolumn=yes
-  let g:LanguageClient_serverCommands = {
-      \ 'go': ['gopls', '-mode', 'stdio']
-      \ }
-  let g:LanguageClient_loadSettings = 1
-  let g:LanguageClient_hasSnippetSupport = 0
+#[[plugins]]
+#repo = 'autozimu/LanguageClient-neovim'
+#build = 'bash install.sh'
+#rev = 'next'
+#depends = ['fzf.vim']
+#hook_add = '''
+#  set hidden
+#  set signcolumn=yes
+#  let g:LanguageClient_serverCommands = {
+#      \ 'go': ['gopls']
+#      \ }
+#  let g:LanguageClient_loadSettings = 1
+#  let g:LanguageClient_hasSnippetSupport = 0
+#
+#  nnoremap <leader>sd :call LanguageClient#textDocument_hover()<CR>
+#  nnoremap <leader>jd :call LanguageClient#textDocument_definition()<CR>
+#  nnoremap <leader>jv :call LanguageClient#textDocument_definition({'gotoCmd': "vsplit"})<CR>
+#  nnoremap <leader>jy :call LanguageClient#textDocument_typeDefinition({'gotoCmd': "vsplit"})<CR>
+#  nnoremap <leader>ji :call LanguageClient#textDocument_implementation({'gotoCmd': "vsplit"})<CR>
+#  noremap <leader>rn :call LanguageClient#textDocument_rename()<CR>
+#'''
 
-  nnoremap <leader>sd :call LanguageClient#textDocument_hover()<CR>
-  nnoremap <leader>jd :call LanguageClient#textDocument_definition()<CR>
-  nnoremap <leader>jv :call LanguageClient#textDocument_definition({'gotoCmd': "vsplit"})<CR>
-  nnoremap <leader>jy :call LanguageClient#textDocument_typeDefinition({'gotoCmd': "vsplit"})<CR>
-  nnoremap <leader>ji :call LanguageClient#textDocument_implementation({'gotoCmd': "vsplit"})<CR>
-  noremap <leader>rn :call LanguageClient#textDocument_rename()<CR>
+[[plugins]]
+repo = 'prabirshrestha/async.vim'
+
+[[plugins]]
+repo = 'prabirshrestha/asyncomplete.vim'
+
+[[plugins]]
+repo = 'prabirshrestha/asyncomplete-lsp.vim'
+
+[[plugins]]
+repo = 'prabirshrestha/vim-lsp'
+hook_add = '''
+    let g:lsp_diagnostics_enabled = 1
+    let g:lsp_log_verbose = 1
+    let g:lsp_log_file = expand('~/vim-lsp.log')
+    let g:asyncomplete_log_file = expand('~/asyncomplete.log')
+
+    if executable('gopls')
+      augroup LspGo
+        au!
+        autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'go-lang',
+            \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
+            \ 'whitelist': ['go'],
+            \ 'workspace_config': {'gopls': {
+            \     'staticcheck': v:false,
+            \     'completeUnimported': v:false,
+            \     'deepCompletion': v:true,
+            \     'caseSensitiveCompletion': v:true,
+            \     'usePlaceholders': v:true,
+            \     'completionDocumentation': v:false,
+            \     'watchFileChanges': v:true,
+            \     'hoverKind': 'SynopsisDocumentation',
+            \   }},
+            \ })
+        autocmd FileType go setlocal omnifunc=lsp#complete
+        autocmd FileType go nmap <leader>sd :LspHover<cr>
+        autocmd FileType go nmap <leader>jd :LspDefinition<cr>
+        autocmd FileType go nmap <leader>jv :vsp<cr>:LspDefinition<cr>
+        autocmd FileType go nmap <leader>jy :vsp<cr>:LspTypeDefinition<cr>
+        autocmd FileType go nmap <leader>ji :LspImplementation<cr>
+        autocmd FileType go nmap <leader>rn :LspRename<cr>
+        autocmd FileType go nmap <buffer> ,n :LspNextError<cr>
+        autocmd FileType go nmap <buffer> ,p :LspPreviousError<cr>
+      augroup END
+    endif
 '''
 
 [[plugins]]
@@ -71,9 +119,16 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'thomasfaingnaert/vim-lsp-snippets'
+
+[[plugins]]
+repo = 'thomasfaingnaert/vim-lsp-ultisnips'
+
+[[plugins]]
 repo = 'SirVer/ultisnips'
 depends = ['vim-snippets']
 hook_add = '''
+    let g:UltiSnipsSnippetDirectories=["~/.config/nvim/snippets/UltiSnips"]
     let g:UltiSnipsExpandTrigger="<c-x>"
     let g:UltiSnipsJumpForwardTrigger="<c-x>"
     let g:UltiSnipsJumpBackwardTrigger="<c-x>"
@@ -225,6 +280,14 @@ hook_add = '''
 #    nmap <silent> <C-g><C-p> <Plug>GitGutterPrevHunk
 #'''
 
+[[plugins]]
+repo = 'fatih/vim-go'
+hook_add = '''
+  let g:go_snippet_engine = ""
+  let g:go_fmt_command = "goimports"
+  let g:go_def_mapping_enabled = 0
+  let g:go_doc_keywordprg_enabled = 0
+'''
 
 [[plugins]]
 repo = 'kien/ctrlp.vim'
@@ -297,14 +360,6 @@ hook_add = '''
 #    let g:comfortable_motion_friction = 100.0
 #    let g:comfortable_motion_air_drag = 3.0
 #'''
-
-[[plugins]]
-repo = 'fatih/vim-go'
-hook_add = '''
-  let g:go_fmt_command = "goimports"
-  let g:go_def_mapping_enabled = 0
-  let g:go_doc_keywordprg_enabled = 0
-'''
 
 #[[plugins]]
 #repo = 'jmcantrell/vim-virtualenv'
