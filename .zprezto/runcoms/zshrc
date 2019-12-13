@@ -106,7 +106,7 @@ export XDG_CACHE_HOME=$HOME/.cache
 #color setting
 
 # hyper
-export TERM=xterm
+#export TERM=xterm
 
 #export CLICOLOR=1
 #export LSCOLORS=DxGxcxdxCxcgcdabagacad
@@ -212,6 +212,11 @@ export PYENV_ROOT=$HOME/.pyenv
 export PATH=$PATH:$PYENV_ROOT/bin
 if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 
+# see https://qiita.com/sato_9/items/04d219618856eaaeb341
+export CFLAGS="-I$(brew --prefix openssl)/include"
+export LDFLAGS="-L$(brew --prefix openssl)/lib"
+export CONFIGURE_OPTS="--with-openssl=$(brew --prefix openssl)"
+
 # pyenv-virtualenv
 if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
@@ -243,10 +248,8 @@ if [ -f /Applications/MacVim.app/Contents/MacOS/Vim ]; then
     #alias vigoop='env LANG=ja_JP.UTF-8 goop exec /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
 fi
 
-if [ -f /usr/local/bin/nvim ]; then
-    alias nv='/usr/local/bin/nvim'
-    #alias nv='~/src/nvim-osx64/bin/nvim'
-fi
+#alias nv='/usr/local/bin/nvim'
+alias nv='~/src/nvim-osx64/bin/nvim'
 
 # added by travis gem
 [ -f /Users/A12658/.travis/travis.sh ] && source /Users/A12658/.travis/travis.sh
@@ -334,6 +337,12 @@ preexec() {
    printf "\033]0;%s\a" "${1%% *} | $cwd$(gitDirty)" # Omit construct from $1 to show args
 }
 
+# tmux
+alias tmux="TERM=screen-256color-bce tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf"
+if [ $SHLVL = 1 ]; then
+  tmux
+fi
+
 # tag
 if (( $+commands[tag] )); then
   export TAG_CMD_FMT_STRING="nv {{.Filename}} +{{.LineNumber}}"
@@ -400,3 +409,4 @@ if [ -f '/Users/a12658/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/a12658/g
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/a12658/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/a12658/google-cloud-sdk/completion.zsh.inc'; fi
+export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"

@@ -48,6 +48,15 @@ vnoremap v $h
 nnoremap  <Leader>h ^
 nnoremap  <Leader>l $
 
+command -nargs=1 MyLineSearch let @m=<q-args> | call search('^\s*'. @m)
+command -nargs=1 MyLineBackSearch let @m=<q-args> | call search('^\s*'. @m, 'b')
+nnoremap <Space>f :MyLineSearch<Space>
+nnoremap <Space>F :MyLineBackSearch<Space>
+command MyLineSameSearch call search('^\s*'. @m)
+command MyLineBackSameSearch call search('^\s*'. @m, 'b')
+nnoremap <Space>; :MyLineSameSearch<CR>
+nnoremap <Space>, :MyLineBackSameSearch<CR>
+
 " Add key-mappings
 inoremap <silent>jj <Esc>
 vnoremap <Leader>j <Esc>
@@ -74,6 +83,11 @@ cmap w!! w !sudo tee > /dev/null %
 " Escape ? and /
 cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
 cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
+
+" window
+""set termguicolors
+""set pumblend=20
+""hi Pmenu guifg=#2e3440 guibg=#a3be8c
 
 set shiftwidth=4
 set tabstop=4
@@ -118,7 +132,8 @@ set autoread
 " For expressions
 set ttimeout
 set ttimeoutlen=50
-set number
+""set number
+set relativenumber
 set wrap
 set textwidth=0
 set colorcolumn=80
@@ -192,11 +207,12 @@ endif
 " Color schema
 filetype plugin indent on
 let g:badwolf=256
-colorscheme badwolf
+"colorscheme badwolf
+"colorscheme gruvbox
+"colorscheme dogrun
+"colorscheme onedark
+colorscheme challenger_deep
 syntax on
-" truecolor
-set termguicolors
-set background=dark
 
 highlight Normal ctermbg=NONE guibg=NONE
 highlight NonText ctermbg=NONE guibg=NONE

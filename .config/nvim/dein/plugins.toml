@@ -3,9 +3,66 @@ repo = 'Shougo/dein.vim'
 
 [[plugins]]
 repo = 'sjl/badwolf'
+hook_add = '''
+    let g:badwolf_darkgutter = 1
+'''
+
+[[plugins]]
+repo = 'morhetz/gruvbox'
+
+[[plugins]]
+repo = 'joshdick/onedark.vim'
+
+[[plugins]]
+repo = 'challenger-deep-theme/vim'
+name = 'challenger-deep'
+
+[[plugins]]
+repo = 'wadackel/vim-dogrun'
+
+[[plugins]]
+repo = 'fxn/vim-monochrome'
 
 [[plugins]]
 repo = 'cespare/vim-toml'
+
+[[plugins]]
+repo = 'neovim/nvim-lsp'
+hook_add = '''
+lua << EOF
+local util = require'nvim_lsp/util'
+local lsp = vim.lsp
+require'nvim_lsp'.pyls.setup{
+    name = "gopls",
+    cmd = {"gopls", "-mode", "stdio"},
+    filetypes = {"go"},
+    root_dir = util.root_pattern("go.mod", ".git"),
+    log_level = lsp.protocol.MessageType.Warning,
+    settings = {
+        staticcheck = false,
+        completeUnimported = false,
+        deepCompletion = true,
+        caseSensitiveCompletion = true,
+        usePlaceholders = true,
+        completionDocumentation = false,
+        watchFileChanges = true,
+        hoverKind = "SynopsisDocumentation",
+    },
+}
+require'nvim_lsp'.gopls.setup{}
+require'nvim_lsp'.rls.setup{}
+EOF
+
+autocmd Filetype go setlocal omnifunc=v:lua.vim.lsp.omnifunc
+nnoremap <leader>jc <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <leader>jd <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <leader>jv :vsp<cr><cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <leader>sd <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <leader>ji <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <leader>jh <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <leader>jy :vsp<cr><cmd>lua vim.lsp.buf.type_definition()<CR>
+
+'''
 
 #[[plugins]]
 #repo = 'prabirshrestha/async.vim'
@@ -57,53 +114,74 @@ repo = 'cespare/vim-toml'
 #  noremap <leader>rn :call LanguageClient#textDocument_rename()<CR>
 #'''
 
-[[plugins]]
-repo = 'prabirshrestha/async.vim'
-
-[[plugins]]
-repo = 'prabirshrestha/asyncomplete.vim'
-
-[[plugins]]
-repo = 'prabirshrestha/asyncomplete-lsp.vim'
-
-[[plugins]]
-repo = 'prabirshrestha/vim-lsp'
-hook_add = '''
-    let g:lsp_diagnostics_enabled = 1
-    let g:lsp_log_verbose = 1
-    let g:lsp_log_file = expand('~/vim-lsp.log')
-    let g:asyncomplete_log_file = expand('~/asyncomplete.log')
-
-    if executable('gopls')
-      augroup LspGo
-        au!
-        autocmd User lsp_setup call lsp#register_server({
-            \ 'name': 'go-lang',
-            \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
-            \ 'whitelist': ['go'],
-            \ 'workspace_config': {'gopls': {
-            \     'staticcheck': v:false,
-            \     'completeUnimported': v:false,
-            \     'deepCompletion': v:true,
-            \     'caseSensitiveCompletion': v:true,
-            \     'usePlaceholders': v:true,
-            \     'completionDocumentation': v:false,
-            \     'watchFileChanges': v:true,
-            \     'hoverKind': 'SynopsisDocumentation',
-            \   }},
-            \ })
-        autocmd FileType go setlocal omnifunc=lsp#complete
-        autocmd FileType go nmap <leader>sd :LspHover<cr>
-        autocmd FileType go nmap <leader>jd :LspDefinition<cr>
-        autocmd FileType go nmap <leader>jv :vsp<cr>:LspDefinition<cr>
-        autocmd FileType go nmap <leader>jy :vsp<cr>:LspTypeDefinition<cr>
-        autocmd FileType go nmap <leader>ji :LspImplementation<cr>
-        autocmd FileType go nmap <leader>rn :LspRename<cr>
-        autocmd FileType go nmap <buffer> ,n :LspNextError<cr>
-        autocmd FileType go nmap <buffer> ,p :LspPreviousError<cr>
-      augroup END
-    endif
-'''
+#[[plugins]]
+#repo = 'prabirshrestha/async.vim'
+#
+#[[plugins]]
+#repo = 'prabirshrestha/asyncomplete.vim'
+#
+#[[plugins]]
+#repo = 'prabirshrestha/asyncomplete-lsp.vim'
+#
+#[[plugins]]
+#repo = 'prabirshrestha/vim-lsp'
+#hook_add = '''
+#    let g:lsp_diagnostics_enabled = 1
+#    let g:lsp_text_edit_enabled = 0
+#    let g:lsp_log_verbose = 1
+#    let g:lsp_log_file = expand('~/vim-lsp.log')
+#    let g:asyncomplete_log_file = expand('~/asyncomplete.log')
+#
+#    augroup MyLsp
+#        autocmd!
+#
+#        if executable('gopls')
+#          augroup LspGo
+#            au!
+#            autocmd User lsp_setup call lsp#register_server({
+#                \ 'name': 'go-lang',
+#                \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
+#                \ 'whitelist': ['go'],
+#                \ 'workspace_config': {'gopls': {
+#                \   'staticcheck': v:false,
+#                \   'completeUnimported': v:false,
+#                \   'deepCompletion': v:true,
+#                \   'caseSensitiveCompletion': v:true,
+#                \   'usePlaceholders': v:true,
+#                \   'completionDocumentation': v:false,
+#                \   'watchFileChanges': v:true,
+#                \   'hoverKind': 'SynopsisDocumentation',
+#                \   }},
+#                \ })
+#          augroup END
+#        endif
+#
+#        let s:pyls_path = fnamemodify(g:python_host_prog, ':h') . '/'. 'pyls'
+#        if executable('pyls')
+#          autocmd User lsp_setup call lsp#register_server({
+#              \ 'name': 'pyls',
+#              \ 'cmd': { server_info -> [expand(s:pyls_path)] },
+#              \ 'whitelist': ['python'],
+#              \ 'workspace_config': {'pyls': {
+#              \   'plugins': {
+#              \     'pycodestyle': {'enabled': v:true},
+#              \     'jedi_definition': {'follow_imports': v:true, 'follow_builtin_imports': v:true},
+#              \    }}},
+#              \})
+#        endif
+#
+#        setlocal omnifunc=lsp#complete
+#        nmap <leader>sd :LspHover<cr>
+#        nmap <leader>jd :LspDefinition<cr>
+#        nmap <leader>jv :vsp<cr>:LspDefinition<cr>
+#        nmap <leader>jy :vsp<cr>:LspTypeDefinition<cr>
+#        nmap <leader>ji :LspImplementation<cr>
+#        nmap <leader>rn :LspRename<cr>
+#        nmap <buffer> ,n :LspNextError<cr>
+#        nmap <buffer> ,p :LspPreviousError<cr>
+#
+#    augroup END
+#'''
 
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
@@ -112,11 +190,23 @@ hook_add = '''
     let g:deoplete#auto_completion_start_length = 1
     let g:deoplete#enable_smart_case = 1
     let g:deoplete#enable_auto_close_preview = 1
-    let g:deoplete#force_omni_input_patterns = get(g:, 'deoplete#force_omni_input_patterns', {})
-    let g:deoplete#force_omni_input_patterns.go = '[^. \t]\.\w*'
+    call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
     imap <expr><TAB>
      \ pumvisible() ? "\<C-n>" : "\<TAB>"
 '''
+
+#[[plugins]]
+#repo = 'Shougo/deoplete.nvim'
+#hook_add = '''
+#    let g:deoplete#enable_at_startup = 1
+#    let g:deoplete#auto_completion_start_length = 1
+#    let g:deoplete#enable_smart_case = 1
+#    let g:deoplete#enable_auto_close_preview = 1
+#    let g:deoplete#force_omni_input_patterns = get(g:, 'deoplete#force_omni_input_patterns', {})
+#    let g:deoplete#force_omni_input_patterns.go = '[^. \t]\.\w*'
+#    imap <expr><TAB>
+#     \ pumvisible() ? "\<C-n>" : "\<TAB>"
+#'''
 
 [[plugins]]
 repo = 'thomasfaingnaert/vim-lsp-snippets'
@@ -226,15 +316,29 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'liuchengxu/vista.vim'
+hook_add = '''
+    function! NearestMethodOrFunction() abort
+      return get(b:, 'vista_nearest_method_or_function', '')
+    endfunction
+
+    autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+    nmap <leader>ms :Vista vim_lsp<cr>
+    nmap <leader>mf :Vista finder vim_lsp<cr>
+    nmap <leader>mc :Vista!<cr>
+'''
+
+[[plugins]]
 repo = 'itchyny/lightline.vim'
-depends = ['vim-fugitive']
+depends = ['vim-fugitive', 'vista.vim']
 hook_add = '''
     let g:lightline = {
-        \'colorscheme': 'landscape',
+        \'colorscheme': 'onedark',
         \'active': {
         \  'left': [
         \    ['mode', 'paste'],
-        \    ['cocstatus', 'fugitive', 'readonly', 'filename', 'modified'],
+        \    ['fugitive', 'readonly', 'filename', 'modified', 'method'],
+        \    ['pyenv'],
         \  ]
         \},
         \'component': {
@@ -248,8 +352,9 @@ hook_add = '''
         \   'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
         \},
         \'component_function': {
-        \  'filename': 'MyFilename',
-        \   'cocstatus': 'coc#status'
+        \   'filename': 'MyFilename',
+        \   'method': 'NearestMethodOrFunction',
+        \   'pyenv': 'virtualenv#statusline',
         \}
     \}
     set laststatus=2
@@ -280,14 +385,14 @@ hook_add = '''
 #    nmap <silent> <C-g><C-p> <Plug>GitGutterPrevHunk
 #'''
 
-[[plugins]]
-repo = 'fatih/vim-go'
-hook_add = '''
-  let g:go_snippet_engine = ""
-  let g:go_fmt_command = "goimports"
-  let g:go_def_mapping_enabled = 0
-  let g:go_doc_keywordprg_enabled = 0
-'''
+#[[plugins]]
+#repo = 'fatih/vim-go'
+#hook_add = '''
+#  let g:go_snippet_engine = ""
+#  let g:go_fmt_command = "goimports"
+#  let g:go_def_mapping_enabled = 0
+#  let g:go_doc_keywordprg_enabled = 0
+#'''
 
 [[plugins]]
 repo = 'kien/ctrlp.vim'
@@ -361,21 +466,20 @@ hook_add = '''
 #    let g:comfortable_motion_air_drag = 3.0
 #'''
 
-#[[plugins]]
-#repo = 'jmcantrell/vim-virtualenv'
-#
-#[[plugins]]
-#repo = 'scrooloose/nerdtree'
-#hook_add = '''
-#    nmap <silent> <C-q>      :NERDTreeToggle<CR>
-#    vmap <silent> <C-q> <Esc>:NERDTreeToggle<CR>
-#    omap <silent> <C-q>      :NERDTreeToggle<CR>
-#    imap <silent> <C-q> <Esc>:NERDTreeToggle<CR>
-#    cmap <silent> <C-q> <C-u>:NERDTreeToggle<CR>
-#
-#    let NERDTreeShowHidden=1
-#'''
-#
+[[plugins]]
+repo = 'jmcantrell/vim-virtualenv'
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+hook_add = '''
+    nmap <silent> <C-q>      :NERDTreeToggle<CR>
+    vmap <silent> <C-q> <Esc>:NERDTreeToggle<CR>
+    omap <silent> <C-q>      :NERDTreeToggle<CR>
+    imap <silent> <C-q> <Esc>:NERDTreeToggle<CR>
+    cmap <silent> <C-q> <C-u>:NERDTreeToggle<CR>
+
+    let NERDTreeShowHidden=1
+'''
 [[plugins]]
 repo = 'hashivim/vim-terraform'
 hook_add = '''
@@ -437,3 +541,6 @@ hook_add = '''
         \}
     autocmd FileType c,cpp,proto,javascript ClangFormatAutoEnable
 '''
+
+[[plugins]]
+repo = 'andymass/vim-matchup'
