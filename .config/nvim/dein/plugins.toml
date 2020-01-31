@@ -108,7 +108,7 @@ hook_add = '''
           augroup LspGo
             au!
             autocmd User lsp_setup call lsp#register_server({
-                \ 'name': 'go-lang',
+                \ 'name': 'gopls',
                 \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
                 \ 'whitelist': ['go'],
                 \ 'workspace_config': {'gopls': {
@@ -143,6 +143,20 @@ hook_add = '''
             autocmd bufWritePost *.py :LspDocumentFormat
           augroup END
         endif
+
+        if executable('analysis-server-dart-snapshot')
+          augroup LspDart
+            au!
+            autocmd User lsp_setup call lsp#register_server({
+                \ 'name': 'analysis-server-dart-snapshot',
+                \ 'cmd': { server_info -> ['analysis-server-dart-snapshot'] },
+                \ 'whitelist': ['dart'],
+                \ 'workspace_config': {'analysis-server-dart-snapshot': {}},
+                \})
+            autocmd bufWritePost *.dart :LspDocumentFormat
+          augroup END
+        endif
+
 
         ""setlocal omnifunc=lsp#complete
         nmap <leader>sd :LspHover<cr>
