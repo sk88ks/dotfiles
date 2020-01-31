@@ -43,6 +43,9 @@ export CATALINA_HOME='/usr/local/Cellar/tomcat/7.0.42/libexec'
 export GOPATH=$HOME/work
 export GOROOT=$HOME/work/src/github.com/golang/go
 
+# Flutter
+export PATH=$PATH:~/work/src/github.com/flutter/flutter/bin
+
 # istio
 export PATH=$PATH:$HOME/istio-0.2.12/bin
 
@@ -96,6 +99,8 @@ export SHELL='zsh'
 
 export XDG_CONFIG_HOME=$HOME/.config
 export XDG_CACHE_HOME=$HOME/.cache
+
+bindkey "jj" vi-cmd-mode
 
 #AWS CLI
 #export AWS_ACCESS_KEY_ID=myproject
@@ -372,6 +377,9 @@ docker-enter() {
 #export PATH=$PATH:$HOME/src/helm2.8.2
 export PATH=$PATH:$HOME/src/helm2.12.3
 source <(helm completion zsh)
+
+# kubectl
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 # direnv
 eval "$(direnv hook zsh)"

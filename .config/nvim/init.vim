@@ -59,7 +59,9 @@ nnoremap <Space>, :MyLineBackSameSearch<CR>
 
 " Add key-mappings
 inoremap <silent>jj <Esc>
-vnoremap <Leader>j <Esc>
+vnoremap <silent><C-j> <Esc>
+"inoremap <silent><C-[> <Esc>
+"vnoremap <silent><C-[> <Esc>
 
 " Tab jump
 nnoremap <Tab> %

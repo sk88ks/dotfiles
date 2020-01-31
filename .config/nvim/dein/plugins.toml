@@ -65,39 +65,41 @@ repo = 'cespare/vim-toml'
 #'''
 
 [[plugins]]
-repo = 'fatih/vim-go'
-hook_add = '''
-  let g:go_snippet_engine = ""
-  let g:go_fmt_command = "goimports"
-  let g:go_def_mapping_enabled = 0
-  let g:go_doc_keywordprg_enabled = 0
-'''
+repo = 'mattn/vim-goimports'
+
+#[[plugins]]
+#repo = 'fatih/vim-go'
+#hook_add = '''
+#  let g:go_snippet_engine = ""
+#  let g:go_fmt_command = "goimports"
+#  let g:go_def_mapping_enabled = 0
+#  let g:go_doc_keywordprg_enabled = 0
+#  let g:go_code_completion_enabled = 0
+#'''
 
 [[plugins]]
 repo = 'prabirshrestha/async.vim'
-hook_add = '''
-    inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-    inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
-    imap <c-space> <Plug>(asyncomplete_force_refresh)
-    let g:asyncomplete_auto_popup = 1
-'''
 
+#[[plugins]]
+#repo = 'prabirshrestha/asyncomplete.vim'
+#hook_add = '''
+#    inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+#    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+#    inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
+#    imap <c-space> <Plug>(asyncomplete_force_refresh)
+#'''
 
-[[plugins]]
-repo = 'prabirshrestha/asyncomplete.vim'
-
-[[plugins]]
-repo = 'prabirshrestha/asyncomplete-lsp.vim'
+#[[plugins]]
+#repo = 'prabirshrestha/asyncomplete-lsp.vim'
 
 [[plugins]]
 repo = 'prabirshrestha/vim-lsp'
 hook_add = '''
-    let g:lsp_diagnostics_enabled = 1
+    let g:lsp_insert_text_enabled = 0
     let g:lsp_text_edit_enabled = 0
-    let g:lsp_log_verbose = 1
-    let g:lsp_log_file = expand('~/vim-lsp.log')
-    let g:asyncomplete_log_file = expand('~/asyncomplete.log')
+    ""let g:lsp_log_verbose = 1
+    ""let g:lsp_log_file = expand('~/vim-lsp.log')
+    ""let g:asyncomplete_log_file = expand('~/asyncomplete.log')
 
     augroup MyLsp
         autocmd!
@@ -120,24 +122,29 @@ hook_add = '''
                 \   'hoverKind': 'SynopsisDocumentation',
                 \   }},
                 \ })
+            autocmd bufWritePost *.go :LspDocumentFormat
           augroup END
         endif
 
         let s:pyls_path = fnamemodify(g:python_host_prog, ':h') . '/'. 'pyls'
         if executable('pyls')
-          autocmd User lsp_setup call lsp#register_server({
-              \ 'name': 'pyls',
-              \ 'cmd': { server_info -> [expand(s:pyls_path)] },
-              \ 'whitelist': ['python'],
-              \ 'workspace_config': {'pyls': {
-              \   'plugins': {
-              \     'pycodestyle': {'enabled': v:true},
-              \     'jedi_definition': {'follow_imports': v:true, 'follow_builtin_imports': v:true},
-              \    }}},
-              \})
+          augroup LspPython
+            au!
+            autocmd User lsp_setup call lsp#register_server({
+                \ 'name': 'pyls',
+                \ 'cmd': { server_info -> [expand(s:pyls_path)] },
+                \ 'whitelist': ['python'],
+                \ 'workspace_config': {'pyls': {
+                \   'plugins': {
+                \     'pycodestyle': {'enabled': v:true},
+                \     'jedi_definition': {'follow_imports': v:true, 'follow_builtin_imports': v:true},
+                \    }}},
+                \})
+            autocmd bufWritePost *.py :LspDocumentFormat
+          augroup END
         endif
 
-        setlocal omnifunc=lsp#complete
+        ""setlocal omnifunc=lsp#complete
         nmap <leader>sd :LspHover<cr>
         nmap <leader>jd :LspDefinition<cr>
         nmap <leader>jv :vsp<cr>:LspDefinition<cr>
@@ -161,6 +168,16 @@ hook_add = '''
     imap <expr><TAB>
      \ pumvisible() ? "\<C-n>" : "\<TAB>"
 '''
+
+[[plugins]]
+repo = 'ncm2/float-preview.nvim.git'
+hook_add = '''
+    set completeopt-=preview
+    let g:float_preview#docked = 0
+'''
+
+[[plugins]]
+repo = 'lighttiger2505/deoplete-vim-lsp'
 
 [[plugins]]
 repo = 'thomasfaingnaert/vim-lsp-snippets'
@@ -382,14 +399,15 @@ hook_add = '''
 repo = 'godlygeek/tabular'
 
 [[plugins]]
-repo = 'plasticboy/vim-markdown'
+repo = 'iamcco/markdown-preview.nvim'
+on_ft = ['markdown', 'pandoc.markdown', 'rmd']
+build = 'cd app & yarn install'
 
 [[plugins]]
 repo = 'tyru/open-browser.vim'
-
-[[plugins]]
-repo = 'kannokanno/previm'
-
+hook_add = '''
+    let g:openbrowser_browser_commands = [ {'name': 'google-chrome-stable',  'args': ['{browser}', '{uri}']} ]
+'''
 
 [[plugins]]
 repo = 'ekalinin/Dockerfile.vim'
@@ -436,3 +454,6 @@ hook_add = '''
 
 [[plugins]]
 repo = 'andymass/vim-matchup'
+
+[[plugins]]
+repo = 'dart-lang/dart-vim-plugin'
