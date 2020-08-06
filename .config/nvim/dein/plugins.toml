@@ -157,6 +157,25 @@ hook_add = '''
           augroup END
         endif
 
+        if executable('yaml-language-server')
+          augroup LspYamlLanguageServer
+            au!
+            autocmd User lsp_setup call lsp#register_server({
+                \ 'name': 'yaml-language-server',
+                \ 'cmd': { server_info -> ['yaml-language-server', '--stdio'] },
+                \ 'whitelist': ['yaml'],
+                \ 'workspace_config': {'yaml-language-server': {
+                \   'yaml.format.enable': v:true,
+                \   'yaml.schemaStore.enable': v:true,
+                \   'yaml.schema': {
+                \       "http://json.schemastore.org/composer": "/*",
+                \       "Kubernetes": "globPattern",
+                \       },
+                \   }},
+                \})
+          augroup END
+        endif
+
 
         ""setlocal omnifunc=lsp#complete
         nmap <leader>sd :LspHover<cr>
@@ -392,18 +411,7 @@ hook_add = '''
 [[plugins]]
 repo = 'jmcantrell/vim-virtualenv'
 
-[[plugins]]
-repo = 'scrooloose/nerdtree'
-hook_add = '''
-    nmap <silent> <C-q>      :NERDTreeToggle<CR>
-    vmap <silent> <C-q> <Esc>:NERDTreeToggle<CR>
-    omap <silent> <C-q>      :NERDTreeToggle<CR>
-    imap <silent> <C-q> <Esc>:NERDTreeToggle<CR>
-    cmap <silent> <C-q> <C-u>:NERDTreeToggle<CR>
-
-    let NERDTreeShowHidden=1
-'''
-[[plugins]]
+[[pldugins]]
 repo = 'hashivim/vim-terraform'
 hook_add = '''
     let g:terraform_align = 1
@@ -458,10 +466,20 @@ repo = 'rhysd/vim-clang-format'
 hook_add = '''
     let g:clang_format#filetype_style_options = {
         \"proto": {
-        \    "BasedOnStyle" : "Google",
-        \    "AlignConsecutiveAssignments": "true",
-        \    "AlignConsecutiveDeclarations": "true",
-        \    }
+            \ "BasedOnStyle" : "Google",
+            \ "AlignConsecutiveAssignments" : "true",
+            \ "AlignConsecutiveDeclarations" : "true",
+            \ "AlignTrailingComments": "false",
+            \ "ColumnLimit" : 200,
+            \ "IndentWidth": 2,
+            \ "ConstructorInitializerIndentWidth" : 2,
+            \ "ContinuationIndentWidth" : 2,
+            \ "AccessModifierOffset" : -2,
+            \ "AllowShortIfStatementsOnASingleLine" : "true",
+            \ "AlwaysBreakTemplateDeclarations" : "No",
+            \ "SpacesBeforeTrailingComments": 1,
+            \ "Standard" : "C++11",
+            \ }
         \}
     autocmd FileType c,cpp,proto,javascript ClangFormatAutoEnable
 '''
@@ -471,3 +489,9 @@ repo = 'andymass/vim-matchup'
 
 [[plugins]]
 repo = 'dart-lang/dart-vim-plugin'
+
+[[plugins]]
+repo = 'lambdalisue/fern.vim'
+hook_add = '''
+    nmap <silent> <C-q> :Fern . -drawer -toggle<CR>
+'''

@@ -375,7 +375,7 @@ docker-enter() {
 
 # helm ompletion
 #export PATH=$PATH:$HOME/src/helm2.8.2
-export PATH=$PATH:$HOME/src/helm2.12.3
+#export PATH=$PATH:$HOME/src/helm2.12.3
 source <(helm completion zsh)
 
 # kubectl
