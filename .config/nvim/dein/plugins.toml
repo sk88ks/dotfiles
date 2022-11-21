@@ -113,7 +113,7 @@ hook_add = '''
                 \ 'whitelist': ['go'],
                 \ 'workspace_config': {'gopls': {
                 \   'staticcheck': v:false,
-                \   'completeUnimported': v:false,
+                \   'completeUnimported': v:true,
                 \   'deepCompletion': v:true,
                 \   'caseSensitiveCompletion': v:true,
                 \   'usePlaceholders': v:true,
@@ -163,13 +163,32 @@ hook_add = '''
             autocmd User lsp_setup call lsp#register_server({
                 \ 'name': 'yaml-language-server',
                 \ 'cmd': { server_info -> ['yaml-language-server', '--stdio'] },
-                \ 'whitelist': ['yaml'],
+                \ 'whitelist': ['yaml','yml'],
                 \ 'workspace_config': {'yaml-language-server': {
                 \   'yaml.format.enable': v:true,
                 \   'yaml.schemaStore.enable': v:true,
+                \   'yaml.customTags': [
+                \       "!And",
+                \       "!If",
+                \       "!Not",
+                \       "!Equals",
+                \       "!Or",
+                \       "!FindInMap",
+                \       "!Base64",
+                \       "!Cidr",
+                \       "!Ref",
+                \       "!Sub",
+                \       "!GetAtt",
+                \       "!GetAZs",
+                \       "!ImportValue",
+                \       "!Select",
+                \       "!Split",
+                \       "!Join"
+                \   ],
                 \   'yaml.schema': {
                 \       "http://json.schemastore.org/composer": "/*",
-                \       "Kubernetes": "globPattern",
+                \       "https://kubernetesjsonschema.dev/v1.14.0/deployment-apps-v1.json": "globPattern",
+                \       "https://cfn-schema.y13i.com/schema": "globPattern",
                 \       },
                 \   }},
                 \})
@@ -195,9 +214,11 @@ repo = 'Shougo/deoplete.nvim'
 hook_add = '''
     let g:deoplete#enable_at_startup = 1
     let g:deoplete#auto_completion_start_length = 1
-    let g:deoplete#enable_smart_case = 1
     let g:deoplete#enable_auto_close_preview = 1
-    call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
+    call deoplete#custom#option({
+    \ 'omni_patterns': { 'go': '[^. *\t]\.\w*' },
+    \ 'smart_case': v:true,
+    \ })
     imap <expr><TAB>
      \ pumvisible() ? "\<C-n>" : "\<TAB>"
 '''
@@ -423,7 +444,13 @@ repo = 'godlygeek/tabular'
 [[plugins]]
 repo = 'iamcco/markdown-preview.nvim'
 on_ft = ['markdown', 'pandoc.markdown', 'rmd']
-build = 'cd app & yarn install'
+build = 'cd app && yarn install'
+
+#[[plugins]]
+#repo = 'previm/previm'
+#hook_add = '''
+#    let g:previm_open_cmd = 'open -a "Google Chrome"'
+#'''
 
 [[plugins]]
 repo = 'tyru/open-browser.vim'

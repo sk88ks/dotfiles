@@ -2,15 +2,15 @@
 add_newline = false
 
 # Overwrite a default_prompt_order and  use custom prompt_order
-prompt_order= [
-    "directory",
-    "git_branch",
-    "git_state",
-    "git_status",
-    "kubernetes",
-    "line_break",
-    "character",
-]
+#format = """
+#$directory\
+#$git_branch\
+#$git_state\
+#$git_status\
+#$kubernetes\
+#$line_break\
+#$character\
+#"""
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]      # The name of the module we are confguring is "character"
@@ -23,11 +23,27 @@ disabled = true
 #disabled = true
 
 [directory]
-truncation_length = 2
+truncation_length = 3
 truncate_to_repo = false
+
+[git_branch]
+symbol = ""
 
 [kubernetes]
 disabled = false
 
-[git_branch]
+[golang]
+symbol = "GO "
+
+[python]
+format = 'via [${symbol}${pyenv_prefix}($virtualenv)]($style) '
 symbol = ""
+pyenv_version_name = true
+
+[aws]
+style = "bold blue"
+symbol = "AWS "
+displayed_items = "all"
+
+[aws.region_aliases]
+ap-northeast-1 = "jp"

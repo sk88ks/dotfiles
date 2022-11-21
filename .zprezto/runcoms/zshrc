@@ -42,6 +42,7 @@ export CATALINA_HOME='/usr/local/Cellar/tomcat/7.0.42/libexec'
 #export GOROOT=$GOENV_ROOT/versions/$GO_GLOBAL_VERSION
 export GOPATH=$HOME/work
 export GOROOT=$HOME/work/src/github.com/golang/go
+export GOROOT_BOOTSTRAP=$HOME/src/go1.4-bootstrap
 
 # Flutter
 export PATH=$PATH:~/work/src/github.com/flutter/flutter/bin
@@ -56,7 +57,7 @@ export PATH=$PATH:$HOME/istio-0.2.12/bin
 #export PACKER_PATH=/usr/local/packer
 #
 # JAVA
-#export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
+export JAVA_HOME="$(/usr/libexec/java_home -v 14)"
 #jenv enable-plugin export
 
 # Scala
@@ -99,8 +100,6 @@ export SHELL='zsh'
 
 export XDG_CONFIG_HOME=$HOME/.config
 export XDG_CACHE_HOME=$HOME/.cache
-
-bindkey "jj" vi-cmd-mode
 
 #AWS CLI
 #export AWS_ACCESS_KEY_ID=myproject
@@ -161,6 +160,7 @@ alias gvpout="source gvp out"
 alias fluent-tail="/opt/td-agent/embedded/bin/fluent-tail"
 alias gb=$GOPATH/bin/gb
 alias ctags="`brew --prefix`/bin/ctags"
+alias sed='gsed'
 
 #nvm
 #. ~/.nvm/nvm.sh
@@ -179,6 +179,7 @@ colors
 
 # vim 風キーバインドにする
 bindkey -v
+bindkey "jj" vi-cmd-mode
 
 # ヒストリの設定
 HISTFILE=~/.zsh_history
@@ -213,9 +214,10 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
                    /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
 
 ## pyenv
-export PYENV_ROOT=$HOME/.pyenv
-export PATH=$PATH:$PYENV_ROOT/bin
-if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
 
 # see https://qiita.com/sato_9/items/04d219618856eaaeb341
 export CFLAGS="-I$(brew --prefix openssl)/include"
@@ -238,7 +240,8 @@ fi
 
 # nodenv
 export NODENV_ROOT=$HOME/.nodenv
-export PATH=$PATH:$NODENV_ROOT/bin
+export NODENV_GLOBAL=$(nodenv global)
+export PATH=$PATH:$NODENV_ROOT/versions/$NODENV_GLOBAL/bin
 if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 
 # for Golang
@@ -320,6 +323,7 @@ bindkey '^r' peco_select_history
 #PROMPT='%{${fg[cyan]}%}[%n@%m]%{${reset_color}%}%~ <${vcs_info_msg_0_}>
 #%# '
 eval "$(starship init zsh)"
+
 # Override auto-title when static titles are desired ($ title My new title)
 title() { export TITLE_OVERRIDDEN=1; echo -en "\e]0;$*\a"}
 # Turn off static titles ($ autotitle)
@@ -376,10 +380,14 @@ docker-enter() {
 # helm ompletion
 #export PATH=$PATH:$HOME/src/helm2.8.2
 #export PATH=$PATH:$HOME/src/helm2.12.3
-source <(helm completion zsh)
+#source <(helm completion zsh)
 
-# kubectl
+# kubernetes
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+[[ $commands[eksctl] ]] && source <(eksctl completion zsh)
+[[ $commands[helm] ]] && source <(helm completion zsh)
+
 
 # direnv
 eval "$(direnv hook zsh)"
@@ -411,10 +419,4 @@ export CLOUDSDK_PYTHON_SITEPACKAGES=1
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/vault vault
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/a12658/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/a12658/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/a12658/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/a12658/google-cloud-sdk/completion.zsh.inc'; fi
-export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"

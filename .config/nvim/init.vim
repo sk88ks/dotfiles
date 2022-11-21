@@ -221,7 +221,9 @@ highlight NonText ctermbg=NONE guibg=NONE
 highlight SpecialKey ctermbg=NONE guibg=NONE
 highlight EndOfBuffer ctermbg=NONE guibg=NONE
 
-""au BufNewFile,BufRead *.scala setf scala
+"Util keybinds
+imap <silent> <C-D>d <C-R>=strftime("%Y-%m-%d")<CR>
+imap <silent> <C-D>t <C-R>=strftime("%H:%M:%S")<CR>
 
 " tags
 ""nnoremap <Space>dv :vsp<CR> :exe("tjump ".expand('<cword>'))<CR>
